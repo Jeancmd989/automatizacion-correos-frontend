@@ -1,0 +1,89 @@
+# ─────────────────────────────────────────────────────────────────────
+# Refresco del contrato de API.
+#
+# Trae el `openapi.json` del repositorio del backend, regenera el
+# cliente y abre un pull request si algo cambio.
+#
+# Por que un pull request y no un commit directo: un cambio de contrato
+# puede romper la interfaz, y conviene que alguien lo mire antes de que
+# entre en `main`. Ademas, el propio CI del pull request ejecuta el
+# tipado y los tests contra el cliente nuevo, de modo que una
+# incompatibilidad se ve en la revision y no al desplegar.
+#
+# Requisito: el secreto `TOKEN_CONTRATO_BACKEND`, un token de acceso
+# personal de grano fino con permiso de SOLO LECTURA sobre el contenido
+# del repositorio automatizacion-correos-backend. Hace falta porque ese
+# repositorio es privado y el GITHUB_TOKEN de este solo alcanza a este.
+# Mientras el secreto no exista, el workflow avisa y termina sin error.
+# ─────────────────────────────────────────────────────────────────────
+
+name: Sincronizar contrato de API
+
+on:
+  # Manual, para traer un cambio concreto cuando se necesita.
+  workflow_dispatch:
+  # Y una revision semanal, para que una deriva no pase meses inadvertida.
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sincronizar:
+    name: Traer el contrato y regenerar el cliente
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Comprobar que el token esta configurado
+        id: comprobacion
+        env:
+          TOKEN: ${{ secrets.TOKEN_CONTRATO_BACKEND }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::warning::Falta el secreto TOKEN_CONTRATO_BACKEND. Ver la cabecera de este workflow."
+            echo "disponible=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "disponible=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.comprobacion.outputs.disponible == 'true'
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Descargar el contrato del backend
+        if: steps.comprobacion.outputs.disponible == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.TOKEN_CONTRATO_BACKEND }}
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github.raw" \
+            /repos/Jeancmd989/automatizacion-correos-backend/contents/openapi.json \
+            > contrato/openapi.json
+
+      - name: Regenerar el cliente
+        if: steps.comprobacion.outputs.disponible == 'true'
+        run: |
+          npm ci
+          npm run api:generate
+
+      - name: Abrir pull request si hay cambios
+        if: steps.comprobacion.outputs.disponible == 'true'
+        uses: peter-evans/create-pull-request@v7.0.8
+        with:
+          branch: contrato/actualizacion-automatica
+          commit-message: "chore(contrato): actualizar el contrato de API y regenerar el cliente"
+          title: "Actualizar el contrato de API"
+          body: |
+            El contrato del backend cambio. Este pull request trae el
+            `openapi.json` actualizado y regenera el cliente.
+
+            Revisar el diff de `src/generated/`: si desaparece un campo
+            que la interfaz usa, el `typecheck` de este mismo pull
+            request lo señalara.
+          labels: contrato
+          delete-branch: true

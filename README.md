@@ -21,14 +21,15 @@ estructura lista para construir encima.
 |-------|--------|
 | Configuración de entorno validada, separando servidor y cliente | ✅ |
 | Cliente HTTP contra el BFF, con traducción de errores RFC 9457 | ✅ |
-| Generación del cliente de API desde el `openapi.json` del backend | ✅ configurada |
+| Cliente de API generado desde el contrato del backend (42 ficheros) | ✅ |
 | Cabeceras de seguridad, tokens de diseño, accesibilidad base | ✅ |
 | CI: linting, tipado, tests, build, auditoría y sincronía de contrato | ✅ |
 | Rutas del BFF (login OIDC, sesión, proxy) | pendiente — Fase 6 |
 | Features: buzones, escaneos, registros, revisión, reportes | pendiente — Fase 6 |
 
-**Verificación actual:** 7 tests en verde, `eslint` y `tsc --noEmit` limpios, build de
-producción correcto, cero vulnerabilidades en dependencias de producción.
+**Verificación actual:** 7 tests en verde, `eslint` y `tsc --noEmit` limpios (cliente
+generado incluido), build de producción correcto, cero vulnerabilidades en dependencias
+de producción.
 
 ---
 
@@ -73,15 +74,31 @@ npm run build
 
 Backend y frontend viven en repositorios separados, así que el cliente TypeScript no
 puede regenerarse en el mismo commit que cambia la API. El contrato compartido es el
-`openapi.json` que el backend versiona.
+`openapi.json` del backend, del que este repositorio guarda una copia versionada en
+`contrato/openapi.json`.
 
 ```bash
 npm run api:generate
 ```
 
-Descarga el esquema, regenera `src/generated/` y lo deja listo para commitear. **El CI
-falla si el resultado difiere de lo versionado**, de modo que un campo renombrado en el
-backend rompe el pull request aquí en lugar de romperse en producción.
+Lee el contrato versionado y regenera `src/generated/`. **El CI falla si el resultado
+difiere de lo commiteado**, de modo que nadie puede editar el cliente a mano.
+
+Se lee de disco y no de una URL porque el repositorio del backend es privado: una
+descarga anónima devuelve 404, y meter un token de otro repositorio en el camino crítico
+de cada pull request es fragilidad a cambio de nada.
+
+**Refresco del contrato.** Lo hace
+[`sincronizar-contrato.yml`](.github/workflows/sincronizar-contrato.yml): trae el
+`openapi.json` del backend, regenera el cliente y **abre un pull request** si algo
+cambió. Un cambio de contrato puede romper la interfaz, así que conviene revisarlo; y el
+CI de ese pull request ejecuta el tipado contra el cliente nuevo, de modo que un campo
+que desaparece se ve en la revisión y no al desplegar.
+
+> Para que ese workflow funcione hay que crear el secreto
+> `TOKEN_CONTRATO_BACKEND`: un token de acceso personal de grano fino con permiso de
+> **solo lectura** sobre el contenido de `automatizacion-correos-backend`. Mientras no
+> exista, el workflow avisa y termina sin fallar. Corre manualmente y cada lunes.
 
 Para trabajar contra un backend local con cambios sin publicar:
 
@@ -90,8 +107,7 @@ OPENAPI_URL=http://localhost:8000/openapi.json npm run api:generate
 ```
 
 `src/generated/` está excluido del linting y de los tests: su corrección la garantiza el
-contrato, no una prueba escrita a mano. Editarlo manualmente es exactamente lo que la
-generación existe para impedir.
+contrato, no una prueba escrita a mano.
 
 ---
 

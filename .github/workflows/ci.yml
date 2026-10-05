@@ -83,6 +83,13 @@ jobs:
 
       - run: npm ci
 
+      # El secreto se genera en el momento y no se escribe en el
+      # fichero. Un literal con forma de clave en un workflow es
+      # indistinguible de una fuga real para cualquier escaner, y
+      # acostumbrarse a verlo es como se acaba ignorando una de verdad.
+      - name: Generar secreto efimero para el build
+        run: echo "SESSION_SECRET=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+
       - name: Build de produccion
         run: npm run build
         env:
@@ -94,7 +101,6 @@ jobs:
           OIDC_CLIENT_ID: ci
           OIDC_CLIENT_SECRET: ci
           OIDC_AUDIENCE: https://api.ejemplo.com
-          SESSION_SECRET: clave-de-integracion-continua-de-32-bytes
 
   seguridad:
     name: Dependencias y secretos

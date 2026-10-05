@@ -3,19 +3,24 @@ import { defineConfig } from "orval";
 /**
  * Generacion del cliente a partir del contrato del backend.
  *
- * El backend versiona `openapi.json` en su repositorio y el CI de aqui
- * lo descarga y regenera. Si el backend renombra un campo, el
- * `typecheck` de este repositorio falla en el pull request en lugar de
- * romperse en produccion.
+ * El contrato se versiona en `contrato/openapi.json` y es la copia
+ * autoritativa para este repositorio. Se lee de disco y no de una URL
+ * porque el repositorio del backend es privado: una descarga anonima
+ * devuelve 404, y meter un token de otro repositorio en el camino
+ * critico de cada pull request es fragilidad a cambio de nada.
  *
- *   npm run api:generate
+ * El refresco lo hace `.github/workflows/sincronizar-contrato.yml`,
+ * que abre un pull request cuando el backend cambia. Asi la
+ * actualizacion del contrato se revisa como cualquier otro cambio, en
+ * lugar de colarse en silencio.
+ *
+ *   npm run api:generate                        # desde el contrato versionado
+ *   OPENAPI_URL=http://localhost:8000/openapi.json npm run api:generate
  */
 export default defineConfig({
   mailauto: {
     input: {
-      target:
-        process.env.OPENAPI_URL ??
-        "https://raw.githubusercontent.com/Jeancmd989/automatizacion-correos-backend/main/openapi.json",
+      target: process.env.OPENAPI_URL ?? "./contrato/openapi.json",
     },
     output: {
       mode: "tags-split",
