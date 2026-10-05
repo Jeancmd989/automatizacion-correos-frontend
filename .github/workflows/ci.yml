@@ -1,0 +1,133 @@
+# ─────────────────────────────────────────────────────────────────────
+# Integracion continua del frontend.
+#
+# El trabajo `contrato` es el que sustituye al monorepo: descarga el
+# openapi.json que versiona el backend, regenera el cliente y falla si
+# hay diferencias sin commitear. Es lo que hace imposible que el
+# contrato se desincronice en silencio (ADR 015).
+# ─────────────────────────────────────────────────────────────────────
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+
+permissions:
+  contents: read
+
+jobs:
+  calidad:
+    name: Linting, tipado y tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Linting
+        run: npm run lint
+
+      - name: Tipado
+        run: npm run typecheck
+
+      - name: Tests
+        run: npm run test
+
+  contrato:
+    name: Contrato de API sincronizado
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Regenerar el cliente desde el contrato del backend
+        run: npm run api:generate
+
+      - name: Comprobar que no hay deriva
+        run: |
+          git diff --exit-code src/generated \
+            || { echo "::error::El cliente generado esta desactualizado. Ejecuta 'npm run api:generate' y commitea el resultado."; exit 1; }
+
+  build:
+    name: Construccion
+    runs-on: ubuntu-latest
+    needs: [calidad]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build de produccion
+        run: npm run build
+        env:
+          # Valores minimos para que la validacion de entorno no aborte
+          # el build. No son credenciales reales.
+          API_URL: http://localhost:8000
+          APP_URL: http://localhost:3000
+          OIDC_ISSUER: https://ci.ejemplo.com
+          OIDC_CLIENT_ID: ci
+          OIDC_CLIENT_SECRET: ci
+          OIDC_AUDIENCE: https://api.ejemplo.com
+          SESSION_SECRET: clave-de-integracion-continua-de-32-bytes
+
+  seguridad:
+    name: Dependencias y secretos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Dos auditorias con distinto rigor, a proposito.
+      #
+      # Produccion: tolerancia cero desde severidad moderada. Es el
+      # codigo que se sirve al navegador.
+      #
+      # Desarrollo: solo se corta ante criticas. A dia de hoy quedan
+      # avisos de severidad alta en la cadena de `eslint-config-next`
+      # (fast-glob -> micromatch -> braces) SIN version parcheada
+      # disponible: el rango afectado es `*`. Las `overrides` del
+      # package.json ya fuerzan lo ultimo publicado. Hacer fallar el
+      # pipeline por algo que nadie puede arreglar solo entrena al
+      # equipo a ignorar el trabajo en rojo.
+      - name: Dependencias de produccion
+        run: npm audit --omit=dev --audit-level=moderate
+
+      - name: Dependencias de desarrollo
+        run: npm audit --audit-level=critical
+
+      - name: Buscar secretos en el historial
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

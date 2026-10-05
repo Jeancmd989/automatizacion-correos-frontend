@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de color definidos una sola vez y redeclarados para modo
+ * oscuro. Los componentes usan los tokens, nunca un color literal: eso
+ * es lo que permite cambiar la paleta sin recorrer toda la interfaz.
+ */
+@theme {
+  --color-fondo: oklch(99% 0 0);
+  --color-superficie: oklch(100% 0 0);
+  --color-borde: oklch(92% 0.004 250);
+  --color-texto: oklch(22% 0.01 250);
+  --color-texto-tenue: oklch(52% 0.012 250);
+  --color-acento: oklch(55% 0.16 255);
+  --color-exito: oklch(60% 0.14 150);
+  --color-aviso: oklch(72% 0.15 75);
+  --color-error: oklch(58% 0.19 25);
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-fondo: oklch(18% 0.012 250);
+    --color-superficie: oklch(22% 0.014 250);
+    --color-borde: oklch(32% 0.016 250);
+    --color-texto: oklch(95% 0.005 250);
+    --color-texto-tenue: oklch(72% 0.012 250);
+    --color-acento: oklch(70% 0.14 255);
+  }
+}
+
+body {
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+/* Respeta la preferencia del sistema: las animaciones pueden provocar
+   malestar a personas con sensibilidad vestibular. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Foco siempre visible: sin esto la navegacion por teclado es
+   imposible de seguir (WCAG 2.4.7). */
+:focus-visible {
+  outline: 2px solid var(--color-acento);
+  outline-offset: 2px;
+}
