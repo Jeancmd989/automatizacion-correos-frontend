@@ -55,26 +55,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type listarApiV1MailboxesGetResponse200 = {
-  data: RespuestaListBuzonSalida
-  status: 200
-}
-
-export type listarApiV1MailboxesGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type listarApiV1MailboxesGetResponseSuccess = (listarApiV1MailboxesGetResponse200) & {
-  headers: Headers;
-};
-export type listarApiV1MailboxesGetResponseError = (listarApiV1MailboxesGetResponse422) & {
-  headers: Headers;
-};
-
-export type listarApiV1MailboxesGetResponse = (listarApiV1MailboxesGetResponseSuccess | listarApiV1MailboxesGetResponseError)
-
-export const getListarApiV1MailboxesGetUrl = () => {
+export const getBuzonesListarUrl = () => {
 
 
 
@@ -85,9 +66,9 @@ export const getListarApiV1MailboxesGetUrl = () => {
 /**
  * @summary Listar
  */
-export const listarApiV1MailboxesGet = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<listarApiV1MailboxesGetResponse> => {
+export const buzonesListar = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListBuzonSalida> => {
 
-  return peticionAlBff<listarApiV1MailboxesGetResponse>(getListarApiV1MailboxesGetUrl(),
+  return peticionAlBff<RespuestaListBuzonSalida>(getBuzonesListarUrl(),
   {
     ...options,
     method: 'GET'
@@ -100,69 +81,69 @@ export const listarApiV1MailboxesGet = async ( options?: Parameters<typeof petic
 
 
 
-export const getListarApiV1MailboxesGetQueryKey = () => {
+export const getBuzonesListarQueryKey = () => {
     return [
     `/api/v1/mailboxes`
     ] as const;
     }
 
 
-export const getListarApiV1MailboxesGetQueryOptions = <TData = Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getBuzonesListarQueryOptions = <TData = Awaited<ReturnType<typeof buzonesListar>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListarApiV1MailboxesGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getBuzonesListarQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>> = ({ signal }) => listarApiV1MailboxesGet({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof buzonesListar>>> = ({ signal }) => buzonesListar({ signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListarApiV1MailboxesGetQueryResult = NonNullable<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>>
-export type ListarApiV1MailboxesGetQueryError = HTTPValidationError
+export type BuzonesListarQueryResult = NonNullable<Awaited<ReturnType<typeof buzonesListar>>>
+export type BuzonesListarQueryError = HTTPValidationError
 
 
-export function useListarApiV1MailboxesGet<TData = Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData>> & Pick<
+export function useBuzonesListar<TData = Awaited<ReturnType<typeof buzonesListar>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarApiV1MailboxesGet>>,
+          Awaited<ReturnType<typeof buzonesListar>>,
           TError,
-          Awaited<ReturnType<typeof listarApiV1MailboxesGet>>
+          Awaited<ReturnType<typeof buzonesListar>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarApiV1MailboxesGet<TData = Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData>> & Pick<
+export function useBuzonesListar<TData = Awaited<ReturnType<typeof buzonesListar>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarApiV1MailboxesGet>>,
+          Awaited<ReturnType<typeof buzonesListar>>,
           TError,
-          Awaited<ReturnType<typeof listarApiV1MailboxesGet>>
+          Awaited<ReturnType<typeof buzonesListar>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarApiV1MailboxesGet<TData = Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useBuzonesListar<TData = Awaited<ReturnType<typeof buzonesListar>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Listar
  */
 
-export function useListarApiV1MailboxesGet<TData = Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1MailboxesGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useBuzonesListar<TData = Awaited<ReturnType<typeof buzonesListar>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof buzonesListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListarApiV1MailboxesGetQueryOptions(options)
+  const queryOptions = getBuzonesListarQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -174,26 +155,7 @@ export function useListarApiV1MailboxesGet<TData = Awaited<ReturnType<typeof lis
 
 
 
-export type autorizarApiV1MailboxesAuthorizePostResponse200 = {
-  data: RespuestaUrlDeAutorizacionSalida
-  status: 200
-}
-
-export type autorizarApiV1MailboxesAuthorizePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type autorizarApiV1MailboxesAuthorizePostResponseSuccess = (autorizarApiV1MailboxesAuthorizePostResponse200) & {
-  headers: Headers;
-};
-export type autorizarApiV1MailboxesAuthorizePostResponseError = (autorizarApiV1MailboxesAuthorizePostResponse422) & {
-  headers: Headers;
-};
-
-export type autorizarApiV1MailboxesAuthorizePostResponse = (autorizarApiV1MailboxesAuthorizePostResponseSuccess | autorizarApiV1MailboxesAuthorizePostResponseError)
-
-export const getAutorizarApiV1MailboxesAuthorizePostUrl = () => {
+export const getBuzonesAutorizarUrl = () => {
 
 
 
@@ -205,7 +167,7 @@ export const getAutorizarApiV1MailboxesAuthorizePostUrl = () => {
  * Devuelve la URL de consentimiento. El `state` y el PKCE quedan en Redis.
  * @summary Autorizar
  */
-export const autorizarApiV1MailboxesAuthorizePost = async (iniciarVinculacionEntrada: IniciarVinculacionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<autorizarApiV1MailboxesAuthorizePostResponse> => {
+export const buzonesAutorizar = async (iniciarVinculacionEntrada: IniciarVinculacionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaUrlDeAutorizacionSalida> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -221,7 +183,7 @@ export const autorizarApiV1MailboxesAuthorizePost = async (iniciarVinculacionEnt
     }
     return headers;
   };
-return peticionAlBff<autorizarApiV1MailboxesAuthorizePostResponse>(getAutorizarApiV1MailboxesAuthorizePostUrl(),
+return peticionAlBff<RespuestaUrlDeAutorizacionSalida>(getBuzonesAutorizarUrl(),
   {
     ...options,
     method: 'POST',
@@ -234,13 +196,13 @@ return peticionAlBff<autorizarApiV1MailboxesAuthorizePostResponse>(getAutorizarA
 
 
 
-export const getAutorizarApiV1MailboxesAuthorizePostMutationKey = () => ['autorizarApiV1MailboxesAuthorizePost'] as const;
+export const getBuzonesAutorizarMutationKey = () => ['buzonesAutorizar'] as const;
 
-export const getAutorizarApiV1MailboxesAuthorizePostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>, TError,AutorizarApiV1MailboxesAuthorizePostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>, TError,AutorizarApiV1MailboxesAuthorizePostMutationVariables, TContext> => {
+export const getBuzonesAutorizarMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesAutorizar>>, TError,BuzonesAutorizarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof buzonesAutorizar>>, TError,BuzonesAutorizarMutationVariables, TContext> => {
 
-const mutationKey = getAutorizarApiV1MailboxesAuthorizePostMutationKey();
+const mutationKey = getBuzonesAutorizarMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -250,10 +212,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>, AutorizarApiV1MailboxesAuthorizePostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof buzonesAutorizar>>, BuzonesAutorizarMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  autorizarApiV1MailboxesAuthorizePost(data,requestOptions)
+          return  buzonesAutorizar(data,requestOptions)
         }
 
 
@@ -263,44 +225,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type AutorizarApiV1MailboxesAuthorizePostMutationResult = NonNullable<Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>>
-    export type AutorizarApiV1MailboxesAuthorizePostMutationBody = IniciarVinculacionEntrada
-    export type AutorizarApiV1MailboxesAuthorizePostMutationError = HTTPValidationError
-    export type AutorizarApiV1MailboxesAuthorizePostMutationVariables = {data: IniciarVinculacionEntrada}
+    export type BuzonesAutorizarMutationResult = NonNullable<Awaited<ReturnType<typeof buzonesAutorizar>>>
+    export type BuzonesAutorizarMutationBody = IniciarVinculacionEntrada
+    export type BuzonesAutorizarMutationError = HTTPValidationError
+    export type BuzonesAutorizarMutationVariables = {data: IniciarVinculacionEntrada}
 
     /**
  * @summary Autorizar
  */
-export const useAutorizarApiV1MailboxesAuthorizePost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>, TError,AutorizarApiV1MailboxesAuthorizePostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useBuzonesAutorizar = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesAutorizar>>, TError,BuzonesAutorizarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof autorizarApiV1MailboxesAuthorizePost>>,
+        Awaited<ReturnType<typeof buzonesAutorizar>>,
         TError,
-        AutorizarApiV1MailboxesAuthorizePostMutationVariables,
+        BuzonesAutorizarMutationVariables,
         TContext
       > => {
-      return useMutation(getAutorizarApiV1MailboxesAuthorizePostMutationOptions(options), queryClient);
+      return useMutation(getBuzonesAutorizarMutationOptions(options), queryClient);
     }
-    export type callbackApiV1MailboxesCallbackPostResponse201 = {
-  data: RespuestaBuzonSalida
-  status: 201
-}
-
-export type callbackApiV1MailboxesCallbackPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type callbackApiV1MailboxesCallbackPostResponseSuccess = (callbackApiV1MailboxesCallbackPostResponse201) & {
-  headers: Headers;
-};
-export type callbackApiV1MailboxesCallbackPostResponseError = (callbackApiV1MailboxesCallbackPostResponse422) & {
-  headers: Headers;
-};
-
-export type callbackApiV1MailboxesCallbackPostResponse = (callbackApiV1MailboxesCallbackPostResponseSuccess | callbackApiV1MailboxesCallbackPostResponseError)
-
-export const getCallbackApiV1MailboxesCallbackPostUrl = () => {
+    export const getBuzonesCallbackUrl = () => {
 
 
 
@@ -312,7 +255,7 @@ export const getCallbackApiV1MailboxesCallbackPostUrl = () => {
  * Completa la vinculacion canjeando el codigo por tokens.
  * @summary Callback
  */
-export const callbackApiV1MailboxesCallbackPost = async (callbackEntrada: CallbackEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<callbackApiV1MailboxesCallbackPostResponse> => {
+export const buzonesCallback = async (callbackEntrada: CallbackEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaBuzonSalida> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -328,7 +271,7 @@ export const callbackApiV1MailboxesCallbackPost = async (callbackEntrada: Callba
     }
     return headers;
   };
-return peticionAlBff<callbackApiV1MailboxesCallbackPostResponse>(getCallbackApiV1MailboxesCallbackPostUrl(),
+return peticionAlBff<RespuestaBuzonSalida>(getBuzonesCallbackUrl(),
   {
     ...options,
     method: 'POST',
@@ -341,13 +284,13 @@ return peticionAlBff<callbackApiV1MailboxesCallbackPostResponse>(getCallbackApiV
 
 
 
-export const getCallbackApiV1MailboxesCallbackPostMutationKey = () => ['callbackApiV1MailboxesCallbackPost'] as const;
+export const getBuzonesCallbackMutationKey = () => ['buzonesCallback'] as const;
 
-export const getCallbackApiV1MailboxesCallbackPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>, TError,CallbackApiV1MailboxesCallbackPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>, TError,CallbackApiV1MailboxesCallbackPostMutationVariables, TContext> => {
+export const getBuzonesCallbackMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesCallback>>, TError,BuzonesCallbackMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof buzonesCallback>>, TError,BuzonesCallbackMutationVariables, TContext> => {
 
-const mutationKey = getCallbackApiV1MailboxesCallbackPostMutationKey();
+const mutationKey = getBuzonesCallbackMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -357,10 +300,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>, CallbackApiV1MailboxesCallbackPostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof buzonesCallback>>, BuzonesCallbackMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  callbackApiV1MailboxesCallbackPost(data,requestOptions)
+          return  buzonesCallback(data,requestOptions)
         }
 
 
@@ -370,44 +313,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CallbackApiV1MailboxesCallbackPostMutationResult = NonNullable<Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>>
-    export type CallbackApiV1MailboxesCallbackPostMutationBody = CallbackEntrada
-    export type CallbackApiV1MailboxesCallbackPostMutationError = HTTPValidationError
-    export type CallbackApiV1MailboxesCallbackPostMutationVariables = {data: CallbackEntrada}
+    export type BuzonesCallbackMutationResult = NonNullable<Awaited<ReturnType<typeof buzonesCallback>>>
+    export type BuzonesCallbackMutationBody = CallbackEntrada
+    export type BuzonesCallbackMutationError = HTTPValidationError
+    export type BuzonesCallbackMutationVariables = {data: CallbackEntrada}
 
     /**
  * @summary Callback
  */
-export const useCallbackApiV1MailboxesCallbackPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>, TError,CallbackApiV1MailboxesCallbackPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useBuzonesCallback = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesCallback>>, TError,BuzonesCallbackMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof callbackApiV1MailboxesCallbackPost>>,
+        Awaited<ReturnType<typeof buzonesCallback>>,
         TError,
-        CallbackApiV1MailboxesCallbackPostMutationVariables,
+        BuzonesCallbackMutationVariables,
         TContext
       > => {
-      return useMutation(getCallbackApiV1MailboxesCallbackPostMutationOptions(options), queryClient);
+      return useMutation(getBuzonesCallbackMutationOptions(options), queryClient);
     }
-    export type desvincularApiV1MailboxesConexionIdDeleteResponse204 = {
-  data: void
-  status: 204
-}
-
-export type desvincularApiV1MailboxesConexionIdDeleteResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type desvincularApiV1MailboxesConexionIdDeleteResponseSuccess = (desvincularApiV1MailboxesConexionIdDeleteResponse204) & {
-  headers: Headers;
-};
-export type desvincularApiV1MailboxesConexionIdDeleteResponseError = (desvincularApiV1MailboxesConexionIdDeleteResponse422) & {
-  headers: Headers;
-};
-
-export type desvincularApiV1MailboxesConexionIdDeleteResponse = (desvincularApiV1MailboxesConexionIdDeleteResponseSuccess | desvincularApiV1MailboxesConexionIdDeleteResponseError)
-
-export const getDesvincularApiV1MailboxesConexionIdDeleteUrl = (conexionId: string,) => {
+    export const getBuzonesDesvincularUrl = (conexionId: string,) => {
 
 
 
@@ -419,9 +343,9 @@ export const getDesvincularApiV1MailboxesConexionIdDeleteUrl = (conexionId: stri
  * Revoca el consentimiento en el proveedor y elimina la conexion.
  * @summary Desvincular
  */
-export const desvincularApiV1MailboxesConexionIdDelete = async (conexionId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<desvincularApiV1MailboxesConexionIdDeleteResponse> => {
+export const buzonesDesvincular = async (conexionId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<void> => {
 
-  return peticionAlBff<desvincularApiV1MailboxesConexionIdDeleteResponse>(getDesvincularApiV1MailboxesConexionIdDeleteUrl(conexionId),
+  return peticionAlBff<void>(getBuzonesDesvincularUrl(conexionId),
   {
     ...options,
     method: 'DELETE'
@@ -434,13 +358,13 @@ export const desvincularApiV1MailboxesConexionIdDelete = async (conexionId: stri
 
 
 
-export const getDesvincularApiV1MailboxesConexionIdDeleteMutationKey = () => ['desvincularApiV1MailboxesConexionIdDelete'] as const;
+export const getBuzonesDesvincularMutationKey = () => ['buzonesDesvincular'] as const;
 
-export const getDesvincularApiV1MailboxesConexionIdDeleteMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>, TError,DesvincularApiV1MailboxesConexionIdDeleteMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>, TError,DesvincularApiV1MailboxesConexionIdDeleteMutationVariables, TContext> => {
+export const getBuzonesDesvincularMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesDesvincular>>, TError,BuzonesDesvincularMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof buzonesDesvincular>>, TError,BuzonesDesvincularMutationVariables, TContext> => {
 
-const mutationKey = getDesvincularApiV1MailboxesConexionIdDeleteMutationKey();
+const mutationKey = getBuzonesDesvincularMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -450,10 +374,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>, DesvincularApiV1MailboxesConexionIdDeleteMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof buzonesDesvincular>>, BuzonesDesvincularMutationVariables> = (props) => {
           const {conexionId} = props ?? {};
 
-          return  desvincularApiV1MailboxesConexionIdDelete(conexionId,requestOptions)
+          return  buzonesDesvincular(conexionId,requestOptions)
         }
 
 
@@ -463,21 +387,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type DesvincularApiV1MailboxesConexionIdDeleteMutationResult = NonNullable<Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>>
+    export type BuzonesDesvincularMutationResult = NonNullable<Awaited<ReturnType<typeof buzonesDesvincular>>>
 
-    export type DesvincularApiV1MailboxesConexionIdDeleteMutationError = HTTPValidationError
-    export type DesvincularApiV1MailboxesConexionIdDeleteMutationVariables = {conexionId: string}
+    export type BuzonesDesvincularMutationError = HTTPValidationError
+    export type BuzonesDesvincularMutationVariables = {conexionId: string}
 
     /**
  * @summary Desvincular
  */
-export const useDesvincularApiV1MailboxesConexionIdDelete = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>, TError,DesvincularApiV1MailboxesConexionIdDeleteMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useBuzonesDesvincular = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof buzonesDesvincular>>, TError,BuzonesDesvincularMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof desvincularApiV1MailboxesConexionIdDelete>>,
+        Awaited<ReturnType<typeof buzonesDesvincular>>,
         TError,
-        DesvincularApiV1MailboxesConexionIdDeleteMutationVariables,
+        BuzonesDesvincularMutationVariables,
         TContext
       > => {
-      return useMutation(getDesvincularApiV1MailboxesConexionIdDeleteMutationOptions(options), queryClient);
+      return useMutation(getBuzonesDesvincularMutationOptions(options), queryClient);
     }

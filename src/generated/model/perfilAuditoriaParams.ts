@@ -6,7 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type ListarApiV1ScansGetParams = {
+export type PerfilAuditoriaParams = {
 cursor?: string | null;
 /**
  * @minimum 1

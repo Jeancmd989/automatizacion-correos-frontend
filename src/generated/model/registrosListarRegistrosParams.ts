@@ -6,4 +6,14 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type RespuestaBuzonSalidaMeta = { [key: string]: unknown } | null;
+export type RegistrosListarRegistrosParams = {
+trabajo_id?: string | null;
+ruc?: string | null;
+periodo?: string | null;
+cursor?: string | null;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+limite?: number;
+};

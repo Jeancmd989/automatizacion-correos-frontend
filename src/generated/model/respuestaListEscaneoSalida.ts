@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { EscaneoSalida } from './escaneoSalida';
-import type { RespuestaListEscaneoSalidaMeta } from './respuestaListEscaneoSalidaMeta';
+import type { MetaDePagina } from './metaDePagina';
 
 export interface RespuestaListEscaneoSalida {
   data: EscaneoSalida[];
-  meta?: RespuestaListEscaneoSalidaMeta;
+  meta?: MetaDePagina | null;
   status?: string;
 }

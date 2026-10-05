@@ -25,10 +25,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  ColaDeRevisionApiV1ReviewGetParams,
   CorreccionEntrada,
   HTTPValidationError,
-  ListarRegistrosApiV1RecordsGetParams,
+  RegistrosColaDeRevisionParams,
+  RegistrosListarRegistrosParams,
   RespuestaDictStrInt,
   RespuestaExportacionSalida,
   RespuestaListRegistroSalida,
@@ -58,26 +58,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type listarRegistrosApiV1RecordsGetResponse200 = {
-  data: RespuestaListRegistroSalida
-  status: 200
-}
-
-export type listarRegistrosApiV1RecordsGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type listarRegistrosApiV1RecordsGetResponseSuccess = (listarRegistrosApiV1RecordsGetResponse200) & {
-  headers: Headers;
-};
-export type listarRegistrosApiV1RecordsGetResponseError = (listarRegistrosApiV1RecordsGetResponse422) & {
-  headers: Headers;
-};
-
-export type listarRegistrosApiV1RecordsGetResponse = (listarRegistrosApiV1RecordsGetResponseSuccess | listarRegistrosApiV1RecordsGetResponseError)
-
-export const getListarRegistrosApiV1RecordsGetUrl = (params?: ListarRegistrosApiV1RecordsGetParams,) => {
+export const getRegistrosListarRegistrosUrl = (params?: RegistrosListarRegistrosParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -96,9 +77,9 @@ export const getListarRegistrosApiV1RecordsGetUrl = (params?: ListarRegistrosApi
  * Listado principal, paginado por cursor.
  * @summary Listar Registros
  */
-export const listarRegistrosApiV1RecordsGet = async (params?: ListarRegistrosApiV1RecordsGetParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<listarRegistrosApiV1RecordsGetResponse> => {
+export const registrosListarRegistros = async (params?: RegistrosListarRegistrosParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListRegistroSalida> => {
 
-  return peticionAlBff<listarRegistrosApiV1RecordsGetResponse>(getListarRegistrosApiV1RecordsGetUrl(params),
+  return peticionAlBff<RespuestaListRegistroSalida>(getRegistrosListarRegistrosUrl(params),
   {
     ...options,
     method: 'GET'
@@ -111,69 +92,69 @@ export const listarRegistrosApiV1RecordsGet = async (params?: ListarRegistrosApi
 
 
 
-export const getListarRegistrosApiV1RecordsGetQueryKey = (params?: ListarRegistrosApiV1RecordsGetParams,) => {
+export const getRegistrosListarRegistrosQueryKey = (params?: RegistrosListarRegistrosParams,) => {
     return [
     `/api/v1/records`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getListarRegistrosApiV1RecordsGetQueryOptions = <TData = Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError = HTTPValidationError>(params?: ListarRegistrosApiV1RecordsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getRegistrosListarRegistrosQueryOptions = <TData = Awaited<ReturnType<typeof registrosListarRegistros>>, TError = HTTPValidationError>(params?: RegistrosListarRegistrosParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListarRegistrosApiV1RecordsGetQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getRegistrosListarRegistrosQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>> = ({ signal }) => listarRegistrosApiV1RecordsGet(params, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof registrosListarRegistros>>> = ({ signal }) => registrosListarRegistros(params, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListarRegistrosApiV1RecordsGetQueryResult = NonNullable<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>>
-export type ListarRegistrosApiV1RecordsGetQueryError = HTTPValidationError
+export type RegistrosListarRegistrosQueryResult = NonNullable<Awaited<ReturnType<typeof registrosListarRegistros>>>
+export type RegistrosListarRegistrosQueryError = HTTPValidationError
 
 
-export function useListarRegistrosApiV1RecordsGet<TData = Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError = HTTPValidationError>(
- params: undefined |  ListarRegistrosApiV1RecordsGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData>> & Pick<
+export function useRegistrosListarRegistros<TData = Awaited<ReturnType<typeof registrosListarRegistros>>, TError = HTTPValidationError>(
+ params: undefined |  RegistrosListarRegistrosParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>,
+          Awaited<ReturnType<typeof registrosListarRegistros>>,
           TError,
-          Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>
+          Awaited<ReturnType<typeof registrosListarRegistros>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarRegistrosApiV1RecordsGet<TData = Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError = HTTPValidationError>(
- params?: ListarRegistrosApiV1RecordsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData>> & Pick<
+export function useRegistrosListarRegistros<TData = Awaited<ReturnType<typeof registrosListarRegistros>>, TError = HTTPValidationError>(
+ params?: RegistrosListarRegistrosParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>,
+          Awaited<ReturnType<typeof registrosListarRegistros>>,
           TError,
-          Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>
+          Awaited<ReturnType<typeof registrosListarRegistros>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarRegistrosApiV1RecordsGet<TData = Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError = HTTPValidationError>(
- params?: ListarRegistrosApiV1RecordsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosListarRegistros<TData = Awaited<ReturnType<typeof registrosListarRegistros>>, TError = HTTPValidationError>(
+ params?: RegistrosListarRegistrosParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Listar Registros
  */
 
-export function useListarRegistrosApiV1RecordsGet<TData = Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError = HTTPValidationError>(
- params?: ListarRegistrosApiV1RecordsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarRegistrosApiV1RecordsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosListarRegistros<TData = Awaited<ReturnType<typeof registrosListarRegistros>>, TError = HTTPValidationError>(
+ params?: RegistrosListarRegistrosParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosListarRegistros>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListarRegistrosApiV1RecordsGetQueryOptions(params,options)
+  const queryOptions = getRegistrosListarRegistrosQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -185,26 +166,7 @@ export function useListarRegistrosApiV1RecordsGet<TData = Awaited<ReturnType<typ
 
 
 
-export type obtenerRegistroApiV1RecordsRegistroIdGetResponse200 = {
-  data: RespuestaRegistroSalida
-  status: 200
-}
-
-export type obtenerRegistroApiV1RecordsRegistroIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type obtenerRegistroApiV1RecordsRegistroIdGetResponseSuccess = (obtenerRegistroApiV1RecordsRegistroIdGetResponse200) & {
-  headers: Headers;
-};
-export type obtenerRegistroApiV1RecordsRegistroIdGetResponseError = (obtenerRegistroApiV1RecordsRegistroIdGetResponse422) & {
-  headers: Headers;
-};
-
-export type obtenerRegistroApiV1RecordsRegistroIdGetResponse = (obtenerRegistroApiV1RecordsRegistroIdGetResponseSuccess | obtenerRegistroApiV1RecordsRegistroIdGetResponseError)
-
-export const getObtenerRegistroApiV1RecordsRegistroIdGetUrl = (registroId: string,) => {
+export const getRegistrosObtenerRegistroUrl = (registroId: string,) => {
 
 
 
@@ -215,9 +177,9 @@ export const getObtenerRegistroApiV1RecordsRegistroIdGetUrl = (registroId: strin
 /**
  * @summary Obtener Registro
  */
-export const obtenerRegistroApiV1RecordsRegistroIdGet = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<obtenerRegistroApiV1RecordsRegistroIdGetResponse> => {
+export const registrosObtenerRegistro = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaRegistroSalida> => {
 
-  return peticionAlBff<obtenerRegistroApiV1RecordsRegistroIdGetResponse>(getObtenerRegistroApiV1RecordsRegistroIdGetUrl(registroId),
+  return peticionAlBff<RespuestaRegistroSalida>(getRegistrosObtenerRegistroUrl(registroId),
   {
     ...options,
     method: 'GET'
@@ -230,69 +192,69 @@ export const obtenerRegistroApiV1RecordsRegistroIdGet = async (registroId: strin
 
 
 
-export const getObtenerRegistroApiV1RecordsRegistroIdGetQueryKey = (registroId: string,) => {
+export const getRegistrosObtenerRegistroQueryKey = (registroId: string,) => {
     return [
     `/api/v1/records/${registroId}`
     ] as const;
     }
 
 
-export const getObtenerRegistroApiV1RecordsRegistroIdGetQueryOptions = <TData = Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError = HTTPValidationError>(registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getRegistrosObtenerRegistroQueryOptions = <TData = Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError = HTTPValidationError>(registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getObtenerRegistroApiV1RecordsRegistroIdGetQueryKey(registroId);
+  const queryKey =  queryOptions?.queryKey ?? getRegistrosObtenerRegistroQueryKey(registroId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>> = ({ signal }) => obtenerRegistroApiV1RecordsRegistroIdGet(registroId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof registrosObtenerRegistro>>> = ({ signal }) => registrosObtenerRegistro(registroId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: registroId !== null && registroId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: registroId !== null && registroId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ObtenerRegistroApiV1RecordsRegistroIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>>
-export type ObtenerRegistroApiV1RecordsRegistroIdGetQueryError = HTTPValidationError
+export type RegistrosObtenerRegistroQueryResult = NonNullable<Awaited<ReturnType<typeof registrosObtenerRegistro>>>
+export type RegistrosObtenerRegistroQueryError = HTTPValidationError
 
 
-export function useObtenerRegistroApiV1RecordsRegistroIdGet<TData = Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError = HTTPValidationError>(
- registroId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData>> & Pick<
+export function useRegistrosObtenerRegistro<TData = Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError = HTTPValidationError>(
+ registroId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>,
+          Awaited<ReturnType<typeof registrosObtenerRegistro>>,
           TError,
-          Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>
+          Awaited<ReturnType<typeof registrosObtenerRegistro>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useObtenerRegistroApiV1RecordsRegistroIdGet<TData = Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError = HTTPValidationError>(
- registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData>> & Pick<
+export function useRegistrosObtenerRegistro<TData = Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError = HTTPValidationError>(
+ registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>,
+          Awaited<ReturnType<typeof registrosObtenerRegistro>>,
           TError,
-          Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>
+          Awaited<ReturnType<typeof registrosObtenerRegistro>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useObtenerRegistroApiV1RecordsRegistroIdGet<TData = Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError = HTTPValidationError>(
- registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosObtenerRegistro<TData = Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError = HTTPValidationError>(
+ registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Obtener Registro
  */
 
-export function useObtenerRegistroApiV1RecordsRegistroIdGet<TData = Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError = HTTPValidationError>(
- registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerRegistroApiV1RecordsRegistroIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosObtenerRegistro<TData = Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError = HTTPValidationError>(
+ registroId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosObtenerRegistro>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getObtenerRegistroApiV1RecordsRegistroIdGetQueryOptions(registroId,options)
+  const queryOptions = getRegistrosObtenerRegistroQueryOptions(registroId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -304,26 +266,7 @@ export function useObtenerRegistroApiV1RecordsRegistroIdGet<TData = Awaited<Retu
 
 
 
-export type corregirRegistroApiV1RecordsRegistroIdPatchResponse200 = {
-  data: RespuestaRegistroSalida
-  status: 200
-}
-
-export type corregirRegistroApiV1RecordsRegistroIdPatchResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type corregirRegistroApiV1RecordsRegistroIdPatchResponseSuccess = (corregirRegistroApiV1RecordsRegistroIdPatchResponse200) & {
-  headers: Headers;
-};
-export type corregirRegistroApiV1RecordsRegistroIdPatchResponseError = (corregirRegistroApiV1RecordsRegistroIdPatchResponse422) & {
-  headers: Headers;
-};
-
-export type corregirRegistroApiV1RecordsRegistroIdPatchResponse = (corregirRegistroApiV1RecordsRegistroIdPatchResponseSuccess | corregirRegistroApiV1RecordsRegistroIdPatchResponseError)
-
-export const getCorregirRegistroApiV1RecordsRegistroIdPatchUrl = (registroId: string,) => {
+export const getRegistrosCorregirRegistroUrl = (registroId: string,) => {
 
 
 
@@ -340,8 +283,8 @@ export const getCorregirRegistroApiV1RecordsRegistroIdPatchUrl = (registroId: st
  * que el pipeline existe para evitar.
  * @summary Corregir Registro
  */
-export const corregirRegistroApiV1RecordsRegistroIdPatch = async (registroId: string,
-    correccionEntrada: CorreccionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<corregirRegistroApiV1RecordsRegistroIdPatchResponse> => {
+export const registrosCorregirRegistro = async (registroId: string,
+    correccionEntrada: CorreccionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaRegistroSalida> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -357,7 +300,7 @@ export const corregirRegistroApiV1RecordsRegistroIdPatch = async (registroId: st
     }
     return headers;
   };
-return peticionAlBff<corregirRegistroApiV1RecordsRegistroIdPatchResponse>(getCorregirRegistroApiV1RecordsRegistroIdPatchUrl(registroId),
+return peticionAlBff<RespuestaRegistroSalida>(getRegistrosCorregirRegistroUrl(registroId),
   {
     ...options,
     method: 'PATCH',
@@ -370,13 +313,13 @@ return peticionAlBff<corregirRegistroApiV1RecordsRegistroIdPatchResponse>(getCor
 
 
 
-export const getCorregirRegistroApiV1RecordsRegistroIdPatchMutationKey = () => ['corregirRegistroApiV1RecordsRegistroIdPatch'] as const;
+export const getRegistrosCorregirRegistroMutationKey = () => ['registrosCorregirRegistro'] as const;
 
-export const getCorregirRegistroApiV1RecordsRegistroIdPatchMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>, TError,CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>, TError,CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables, TContext> => {
+export const getRegistrosCorregirRegistroMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosCorregirRegistro>>, TError,RegistrosCorregirRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof registrosCorregirRegistro>>, TError,RegistrosCorregirRegistroMutationVariables, TContext> => {
 
-const mutationKey = getCorregirRegistroApiV1RecordsRegistroIdPatchMutationKey();
+const mutationKey = getRegistrosCorregirRegistroMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -386,10 +329,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>, CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registrosCorregirRegistro>>, RegistrosCorregirRegistroMutationVariables> = (props) => {
           const {registroId,data} = props ?? {};
 
-          return  corregirRegistroApiV1RecordsRegistroIdPatch(registroId,data,requestOptions)
+          return  registrosCorregirRegistro(registroId,data,requestOptions)
         }
 
 
@@ -399,44 +342,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CorregirRegistroApiV1RecordsRegistroIdPatchMutationResult = NonNullable<Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>>
-    export type CorregirRegistroApiV1RecordsRegistroIdPatchMutationBody = CorreccionEntrada
-    export type CorregirRegistroApiV1RecordsRegistroIdPatchMutationError = HTTPValidationError
-    export type CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables = {registroId: string;data: CorreccionEntrada}
+    export type RegistrosCorregirRegistroMutationResult = NonNullable<Awaited<ReturnType<typeof registrosCorregirRegistro>>>
+    export type RegistrosCorregirRegistroMutationBody = CorreccionEntrada
+    export type RegistrosCorregirRegistroMutationError = HTTPValidationError
+    export type RegistrosCorregirRegistroMutationVariables = {registroId: string;data: CorreccionEntrada}
 
     /**
  * @summary Corregir Registro
  */
-export const useCorregirRegistroApiV1RecordsRegistroIdPatch = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>, TError,CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useRegistrosCorregirRegistro = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosCorregirRegistro>>, TError,RegistrosCorregirRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof corregirRegistroApiV1RecordsRegistroIdPatch>>,
+        Awaited<ReturnType<typeof registrosCorregirRegistro>>,
         TError,
-        CorregirRegistroApiV1RecordsRegistroIdPatchMutationVariables,
+        RegistrosCorregirRegistroMutationVariables,
         TContext
       > => {
-      return useMutation(getCorregirRegistroApiV1RecordsRegistroIdPatchMutationOptions(options), queryClient);
+      return useMutation(getRegistrosCorregirRegistroMutationOptions(options), queryClient);
     }
-    export type aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse200 = {
-  data: RespuestaRegistroSalida
-  status: 200
-}
-
-export type aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type aprobarRegistroApiV1RecordsRegistroIdApprovePostResponseSuccess = (aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse200) & {
-  headers: Headers;
-};
-export type aprobarRegistroApiV1RecordsRegistroIdApprovePostResponseError = (aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse422) & {
-  headers: Headers;
-};
-
-export type aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse = (aprobarRegistroApiV1RecordsRegistroIdApprovePostResponseSuccess | aprobarRegistroApiV1RecordsRegistroIdApprovePostResponseError)
-
-export const getAprobarRegistroApiV1RecordsRegistroIdApprovePostUrl = (registroId: string,) => {
+    export const getRegistrosAprobarRegistroUrl = (registroId: string,) => {
 
 
 
@@ -448,9 +372,9 @@ export const getAprobarRegistroApiV1RecordsRegistroIdApprovePostUrl = (registroI
  * El revisor confirma que lo extraido es correcto.
  * @summary Aprobar Registro
  */
-export const aprobarRegistroApiV1RecordsRegistroIdApprovePost = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse> => {
+export const registrosAprobarRegistro = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaRegistroSalida> => {
 
-  return peticionAlBff<aprobarRegistroApiV1RecordsRegistroIdApprovePostResponse>(getAprobarRegistroApiV1RecordsRegistroIdApprovePostUrl(registroId),
+  return peticionAlBff<RespuestaRegistroSalida>(getRegistrosAprobarRegistroUrl(registroId),
   {
     ...options,
     method: 'POST'
@@ -463,13 +387,13 @@ export const aprobarRegistroApiV1RecordsRegistroIdApprovePost = async (registroI
 
 
 
-export const getAprobarRegistroApiV1RecordsRegistroIdApprovePostMutationKey = () => ['aprobarRegistroApiV1RecordsRegistroIdApprovePost'] as const;
+export const getRegistrosAprobarRegistroMutationKey = () => ['registrosAprobarRegistro'] as const;
 
-export const getAprobarRegistroApiV1RecordsRegistroIdApprovePostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>, TError,AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>, TError,AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables, TContext> => {
+export const getRegistrosAprobarRegistroMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosAprobarRegistro>>, TError,RegistrosAprobarRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof registrosAprobarRegistro>>, TError,RegistrosAprobarRegistroMutationVariables, TContext> => {
 
-const mutationKey = getAprobarRegistroApiV1RecordsRegistroIdApprovePostMutationKey();
+const mutationKey = getRegistrosAprobarRegistroMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -479,10 +403,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>, AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registrosAprobarRegistro>>, RegistrosAprobarRegistroMutationVariables> = (props) => {
           const {registroId} = props ?? {};
 
-          return  aprobarRegistroApiV1RecordsRegistroIdApprovePost(registroId,requestOptions)
+          return  registrosAprobarRegistro(registroId,requestOptions)
         }
 
 
@@ -492,44 +416,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationResult = NonNullable<Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>>
+    export type RegistrosAprobarRegistroMutationResult = NonNullable<Awaited<ReturnType<typeof registrosAprobarRegistro>>>
 
-    export type AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationError = HTTPValidationError
-    export type AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables = {registroId: string}
+    export type RegistrosAprobarRegistroMutationError = HTTPValidationError
+    export type RegistrosAprobarRegistroMutationVariables = {registroId: string}
 
     /**
  * @summary Aprobar Registro
  */
-export const useAprobarRegistroApiV1RecordsRegistroIdApprovePost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>, TError,AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useRegistrosAprobarRegistro = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosAprobarRegistro>>, TError,RegistrosAprobarRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof aprobarRegistroApiV1RecordsRegistroIdApprovePost>>,
+        Awaited<ReturnType<typeof registrosAprobarRegistro>>,
         TError,
-        AprobarRegistroApiV1RecordsRegistroIdApprovePostMutationVariables,
+        RegistrosAprobarRegistroMutationVariables,
         TContext
       > => {
-      return useMutation(getAprobarRegistroApiV1RecordsRegistroIdApprovePostMutationOptions(options), queryClient);
+      return useMutation(getRegistrosAprobarRegistroMutationOptions(options), queryClient);
     }
-    export type rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse200 = {
-  data: RespuestaRegistroSalida
-  status: 200
-}
-
-export type rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type rechazarRegistroApiV1RecordsRegistroIdRejectPostResponseSuccess = (rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse200) & {
-  headers: Headers;
-};
-export type rechazarRegistroApiV1RecordsRegistroIdRejectPostResponseError = (rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse422) & {
-  headers: Headers;
-};
-
-export type rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse = (rechazarRegistroApiV1RecordsRegistroIdRejectPostResponseSuccess | rechazarRegistroApiV1RecordsRegistroIdRejectPostResponseError)
-
-export const getRechazarRegistroApiV1RecordsRegistroIdRejectPostUrl = (registroId: string,) => {
+    export const getRegistrosRechazarRegistroUrl = (registroId: string,) => {
 
 
 
@@ -541,9 +446,9 @@ export const getRechazarRegistroApiV1RecordsRegistroIdRejectPostUrl = (registroI
  * Marca el registro como no utilizable: documento ilegible o ajeno.
  * @summary Rechazar Registro
  */
-export const rechazarRegistroApiV1RecordsRegistroIdRejectPost = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse> => {
+export const registrosRechazarRegistro = async (registroId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaRegistroSalida> => {
 
-  return peticionAlBff<rechazarRegistroApiV1RecordsRegistroIdRejectPostResponse>(getRechazarRegistroApiV1RecordsRegistroIdRejectPostUrl(registroId),
+  return peticionAlBff<RespuestaRegistroSalida>(getRegistrosRechazarRegistroUrl(registroId),
   {
     ...options,
     method: 'POST'
@@ -556,13 +461,13 @@ export const rechazarRegistroApiV1RecordsRegistroIdRejectPost = async (registroI
 
 
 
-export const getRechazarRegistroApiV1RecordsRegistroIdRejectPostMutationKey = () => ['rechazarRegistroApiV1RecordsRegistroIdRejectPost'] as const;
+export const getRegistrosRechazarRegistroMutationKey = () => ['registrosRechazarRegistro'] as const;
 
-export const getRechazarRegistroApiV1RecordsRegistroIdRejectPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>, TError,RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>, TError,RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables, TContext> => {
+export const getRegistrosRechazarRegistroMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosRechazarRegistro>>, TError,RegistrosRechazarRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof registrosRechazarRegistro>>, TError,RegistrosRechazarRegistroMutationVariables, TContext> => {
 
-const mutationKey = getRechazarRegistroApiV1RecordsRegistroIdRejectPostMutationKey();
+const mutationKey = getRegistrosRechazarRegistroMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -572,10 +477,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>, RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registrosRechazarRegistro>>, RegistrosRechazarRegistroMutationVariables> = (props) => {
           const {registroId} = props ?? {};
 
-          return  rechazarRegistroApiV1RecordsRegistroIdRejectPost(registroId,requestOptions)
+          return  registrosRechazarRegistro(registroId,requestOptions)
         }
 
 
@@ -585,44 +490,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationResult = NonNullable<Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>>
+    export type RegistrosRechazarRegistroMutationResult = NonNullable<Awaited<ReturnType<typeof registrosRechazarRegistro>>>
 
-    export type RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationError = HTTPValidationError
-    export type RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables = {registroId: string}
+    export type RegistrosRechazarRegistroMutationError = HTTPValidationError
+    export type RegistrosRechazarRegistroMutationVariables = {registroId: string}
 
     /**
  * @summary Rechazar Registro
  */
-export const useRechazarRegistroApiV1RecordsRegistroIdRejectPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>, TError,RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useRegistrosRechazarRegistro = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosRechazarRegistro>>, TError,RegistrosRechazarRegistroMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof rechazarRegistroApiV1RecordsRegistroIdRejectPost>>,
+        Awaited<ReturnType<typeof registrosRechazarRegistro>>,
         TError,
-        RechazarRegistroApiV1RecordsRegistroIdRejectPostMutationVariables,
+        RegistrosRechazarRegistroMutationVariables,
         TContext
       > => {
-      return useMutation(getRechazarRegistroApiV1RecordsRegistroIdRejectPostMutationOptions(options), queryClient);
+      return useMutation(getRegistrosRechazarRegistroMutationOptions(options), queryClient);
     }
-    export type solicitarExportacionApiV1ReportsExportsPostResponse202 = {
-  data: RespuestaExportacionSalida
-  status: 202
-}
-
-export type solicitarExportacionApiV1ReportsExportsPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type solicitarExportacionApiV1ReportsExportsPostResponseSuccess = (solicitarExportacionApiV1ReportsExportsPostResponse202) & {
-  headers: Headers;
-};
-export type solicitarExportacionApiV1ReportsExportsPostResponseError = (solicitarExportacionApiV1ReportsExportsPostResponse422) & {
-  headers: Headers;
-};
-
-export type solicitarExportacionApiV1ReportsExportsPostResponse = (solicitarExportacionApiV1ReportsExportsPostResponseSuccess | solicitarExportacionApiV1ReportsExportsPostResponseError)
-
-export const getSolicitarExportacionApiV1ReportsExportsPostUrl = () => {
+    export const getRegistrosSolicitarExportacionUrl = () => {
 
 
 
@@ -634,7 +520,7 @@ export const getSolicitarExportacionApiV1ReportsExportsPostUrl = () => {
  * Encola la generacion del reporte y devuelve su identificador.
  * @summary Solicitar Exportacion
  */
-export const solicitarExportacionApiV1ReportsExportsPost = async (solicitarExportacionEntrada: SolicitarExportacionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<solicitarExportacionApiV1ReportsExportsPostResponse> => {
+export const registrosSolicitarExportacion = async (solicitarExportacionEntrada: SolicitarExportacionEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaExportacionSalida> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -650,7 +536,7 @@ export const solicitarExportacionApiV1ReportsExportsPost = async (solicitarExpor
     }
     return headers;
   };
-return peticionAlBff<solicitarExportacionApiV1ReportsExportsPostResponse>(getSolicitarExportacionApiV1ReportsExportsPostUrl(),
+return peticionAlBff<RespuestaExportacionSalida>(getRegistrosSolicitarExportacionUrl(),
   {
     ...options,
     method: 'POST',
@@ -663,13 +549,13 @@ return peticionAlBff<solicitarExportacionApiV1ReportsExportsPostResponse>(getSol
 
 
 
-export const getSolicitarExportacionApiV1ReportsExportsPostMutationKey = () => ['solicitarExportacionApiV1ReportsExportsPost'] as const;
+export const getRegistrosSolicitarExportacionMutationKey = () => ['registrosSolicitarExportacion'] as const;
 
-export const getSolicitarExportacionApiV1ReportsExportsPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>, TError,SolicitarExportacionApiV1ReportsExportsPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>, TError,SolicitarExportacionApiV1ReportsExportsPostMutationVariables, TContext> => {
+export const getRegistrosSolicitarExportacionMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosSolicitarExportacion>>, TError,RegistrosSolicitarExportacionMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof registrosSolicitarExportacion>>, TError,RegistrosSolicitarExportacionMutationVariables, TContext> => {
 
-const mutationKey = getSolicitarExportacionApiV1ReportsExportsPostMutationKey();
+const mutationKey = getRegistrosSolicitarExportacionMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -679,10 +565,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>, SolicitarExportacionApiV1ReportsExportsPostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof registrosSolicitarExportacion>>, RegistrosSolicitarExportacionMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  solicitarExportacionApiV1ReportsExportsPost(data,requestOptions)
+          return  registrosSolicitarExportacion(data,requestOptions)
         }
 
 
@@ -692,44 +578,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type SolicitarExportacionApiV1ReportsExportsPostMutationResult = NonNullable<Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>>
-    export type SolicitarExportacionApiV1ReportsExportsPostMutationBody = SolicitarExportacionEntrada
-    export type SolicitarExportacionApiV1ReportsExportsPostMutationError = HTTPValidationError
-    export type SolicitarExportacionApiV1ReportsExportsPostMutationVariables = {data: SolicitarExportacionEntrada}
+    export type RegistrosSolicitarExportacionMutationResult = NonNullable<Awaited<ReturnType<typeof registrosSolicitarExportacion>>>
+    export type RegistrosSolicitarExportacionMutationBody = SolicitarExportacionEntrada
+    export type RegistrosSolicitarExportacionMutationError = HTTPValidationError
+    export type RegistrosSolicitarExportacionMutationVariables = {data: SolicitarExportacionEntrada}
 
     /**
  * @summary Solicitar Exportacion
  */
-export const useSolicitarExportacionApiV1ReportsExportsPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>, TError,SolicitarExportacionApiV1ReportsExportsPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useRegistrosSolicitarExportacion = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registrosSolicitarExportacion>>, TError,RegistrosSolicitarExportacionMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof solicitarExportacionApiV1ReportsExportsPost>>,
+        Awaited<ReturnType<typeof registrosSolicitarExportacion>>,
         TError,
-        SolicitarExportacionApiV1ReportsExportsPostMutationVariables,
+        RegistrosSolicitarExportacionMutationVariables,
         TContext
       > => {
-      return useMutation(getSolicitarExportacionApiV1ReportsExportsPostMutationOptions(options), queryClient);
+      return useMutation(getRegistrosSolicitarExportacionMutationOptions(options), queryClient);
     }
-    export type consultarExportacionApiV1ReportsExportsExportacionIdGetResponse200 = {
-  data: RespuestaExportacionSalida
-  status: 200
-}
-
-export type consultarExportacionApiV1ReportsExportsExportacionIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type consultarExportacionApiV1ReportsExportsExportacionIdGetResponseSuccess = (consultarExportacionApiV1ReportsExportsExportacionIdGetResponse200) & {
-  headers: Headers;
-};
-export type consultarExportacionApiV1ReportsExportsExportacionIdGetResponseError = (consultarExportacionApiV1ReportsExportsExportacionIdGetResponse422) & {
-  headers: Headers;
-};
-
-export type consultarExportacionApiV1ReportsExportsExportacionIdGetResponse = (consultarExportacionApiV1ReportsExportsExportacionIdGetResponseSuccess | consultarExportacionApiV1ReportsExportsExportacionIdGetResponseError)
-
-export const getConsultarExportacionApiV1ReportsExportsExportacionIdGetUrl = (exportacionId: string,) => {
+    export const getRegistrosConsultarExportacionUrl = (exportacionId: string,) => {
 
 
 
@@ -744,9 +611,9 @@ export const getConsultarExportacionApiV1ReportsExportsExportacionIdGetUrl = (ex
  * y suele acabar pegada en un chat.
  * @summary Consultar Exportacion
  */
-export const consultarExportacionApiV1ReportsExportsExportacionIdGet = async (exportacionId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<consultarExportacionApiV1ReportsExportsExportacionIdGetResponse> => {
+export const registrosConsultarExportacion = async (exportacionId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaExportacionSalida> => {
 
-  return peticionAlBff<consultarExportacionApiV1ReportsExportsExportacionIdGetResponse>(getConsultarExportacionApiV1ReportsExportsExportacionIdGetUrl(exportacionId),
+  return peticionAlBff<RespuestaExportacionSalida>(getRegistrosConsultarExportacionUrl(exportacionId),
   {
     ...options,
     method: 'GET'
@@ -759,69 +626,69 @@ export const consultarExportacionApiV1ReportsExportsExportacionIdGet = async (ex
 
 
 
-export const getConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryKey = (exportacionId: string,) => {
+export const getRegistrosConsultarExportacionQueryKey = (exportacionId: string,) => {
     return [
     `/api/v1/reports/exports/${exportacionId}`
     ] as const;
     }
 
 
-export const getConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryOptions = <TData = Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError = HTTPValidationError>(exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getRegistrosConsultarExportacionQueryOptions = <TData = Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError = HTTPValidationError>(exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryKey(exportacionId);
+  const queryKey =  queryOptions?.queryKey ?? getRegistrosConsultarExportacionQueryKey(exportacionId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>> = ({ signal }) => consultarExportacionApiV1ReportsExportsExportacionIdGet(exportacionId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof registrosConsultarExportacion>>> = ({ signal }) => registrosConsultarExportacion(exportacionId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: exportacionId !== null && exportacionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: exportacionId !== null && exportacionId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>>
-export type ConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryError = HTTPValidationError
+export type RegistrosConsultarExportacionQueryResult = NonNullable<Awaited<ReturnType<typeof registrosConsultarExportacion>>>
+export type RegistrosConsultarExportacionQueryError = HTTPValidationError
 
 
-export function useConsultarExportacionApiV1ReportsExportsExportacionIdGet<TData = Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError = HTTPValidationError>(
- exportacionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData>> & Pick<
+export function useRegistrosConsultarExportacion<TData = Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError = HTTPValidationError>(
+ exportacionId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>,
+          Awaited<ReturnType<typeof registrosConsultarExportacion>>,
           TError,
-          Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>
+          Awaited<ReturnType<typeof registrosConsultarExportacion>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConsultarExportacionApiV1ReportsExportsExportacionIdGet<TData = Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError = HTTPValidationError>(
- exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData>> & Pick<
+export function useRegistrosConsultarExportacion<TData = Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError = HTTPValidationError>(
+ exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>,
+          Awaited<ReturnType<typeof registrosConsultarExportacion>>,
           TError,
-          Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>
+          Awaited<ReturnType<typeof registrosConsultarExportacion>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useConsultarExportacionApiV1ReportsExportsExportacionIdGet<TData = Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError = HTTPValidationError>(
- exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosConsultarExportacion<TData = Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError = HTTPValidationError>(
+ exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Consultar Exportacion
  */
 
-export function useConsultarExportacionApiV1ReportsExportsExportacionIdGet<TData = Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError = HTTPValidationError>(
- exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof consultarExportacionApiV1ReportsExportsExportacionIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosConsultarExportacion<TData = Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError = HTTPValidationError>(
+ exportacionId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosConsultarExportacion>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getConsultarExportacionApiV1ReportsExportsExportacionIdGetQueryOptions(exportacionId,options)
+  const queryOptions = getRegistrosConsultarExportacionQueryOptions(exportacionId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -833,26 +700,7 @@ export function useConsultarExportacionApiV1ReportsExportsExportacionIdGet<TData
 
 
 
-export type colaDeRevisionApiV1ReviewGetResponse200 = {
-  data: RespuestaListRegistroSalida
-  status: 200
-}
-
-export type colaDeRevisionApiV1ReviewGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type colaDeRevisionApiV1ReviewGetResponseSuccess = (colaDeRevisionApiV1ReviewGetResponse200) & {
-  headers: Headers;
-};
-export type colaDeRevisionApiV1ReviewGetResponseError = (colaDeRevisionApiV1ReviewGetResponse422) & {
-  headers: Headers;
-};
-
-export type colaDeRevisionApiV1ReviewGetResponse = (colaDeRevisionApiV1ReviewGetResponseSuccess | colaDeRevisionApiV1ReviewGetResponseError)
-
-export const getColaDeRevisionApiV1ReviewGetUrl = (params?: ColaDeRevisionApiV1ReviewGetParams,) => {
+export const getRegistrosColaDeRevisionUrl = (params?: RegistrosColaDeRevisionParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -871,9 +719,9 @@ export const getColaDeRevisionApiV1ReviewGetUrl = (params?: ColaDeRevisionApiV1R
  * Registros que el pipeline no pudo dar por buenos.
  * @summary Cola De Revision
  */
-export const colaDeRevisionApiV1ReviewGet = async (params?: ColaDeRevisionApiV1ReviewGetParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<colaDeRevisionApiV1ReviewGetResponse> => {
+export const registrosColaDeRevision = async (params?: RegistrosColaDeRevisionParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListRegistroSalida> => {
 
-  return peticionAlBff<colaDeRevisionApiV1ReviewGetResponse>(getColaDeRevisionApiV1ReviewGetUrl(params),
+  return peticionAlBff<RespuestaListRegistroSalida>(getRegistrosColaDeRevisionUrl(params),
   {
     ...options,
     method: 'GET'
@@ -886,69 +734,69 @@ export const colaDeRevisionApiV1ReviewGet = async (params?: ColaDeRevisionApiV1R
 
 
 
-export const getColaDeRevisionApiV1ReviewGetQueryKey = (params?: ColaDeRevisionApiV1ReviewGetParams,) => {
+export const getRegistrosColaDeRevisionQueryKey = (params?: RegistrosColaDeRevisionParams,) => {
     return [
     `/api/v1/review`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getColaDeRevisionApiV1ReviewGetQueryOptions = <TData = Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError = HTTPValidationError>(params?: ColaDeRevisionApiV1ReviewGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getRegistrosColaDeRevisionQueryOptions = <TData = Awaited<ReturnType<typeof registrosColaDeRevision>>, TError = HTTPValidationError>(params?: RegistrosColaDeRevisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getColaDeRevisionApiV1ReviewGetQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getRegistrosColaDeRevisionQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>> = ({ signal }) => colaDeRevisionApiV1ReviewGet(params, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof registrosColaDeRevision>>> = ({ signal }) => registrosColaDeRevision(params, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ColaDeRevisionApiV1ReviewGetQueryResult = NonNullable<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>>
-export type ColaDeRevisionApiV1ReviewGetQueryError = HTTPValidationError
+export type RegistrosColaDeRevisionQueryResult = NonNullable<Awaited<ReturnType<typeof registrosColaDeRevision>>>
+export type RegistrosColaDeRevisionQueryError = HTTPValidationError
 
 
-export function useColaDeRevisionApiV1ReviewGet<TData = Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError = HTTPValidationError>(
- params: undefined |  ColaDeRevisionApiV1ReviewGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData>> & Pick<
+export function useRegistrosColaDeRevision<TData = Awaited<ReturnType<typeof registrosColaDeRevision>>, TError = HTTPValidationError>(
+ params: undefined |  RegistrosColaDeRevisionParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>,
+          Awaited<ReturnType<typeof registrosColaDeRevision>>,
           TError,
-          Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>
+          Awaited<ReturnType<typeof registrosColaDeRevision>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useColaDeRevisionApiV1ReviewGet<TData = Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError = HTTPValidationError>(
- params?: ColaDeRevisionApiV1ReviewGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData>> & Pick<
+export function useRegistrosColaDeRevision<TData = Awaited<ReturnType<typeof registrosColaDeRevision>>, TError = HTTPValidationError>(
+ params?: RegistrosColaDeRevisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>,
+          Awaited<ReturnType<typeof registrosColaDeRevision>>,
           TError,
-          Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>
+          Awaited<ReturnType<typeof registrosColaDeRevision>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useColaDeRevisionApiV1ReviewGet<TData = Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError = HTTPValidationError>(
- params?: ColaDeRevisionApiV1ReviewGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosColaDeRevision<TData = Awaited<ReturnType<typeof registrosColaDeRevision>>, TError = HTTPValidationError>(
+ params?: RegistrosColaDeRevisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Cola De Revision
  */
 
-export function useColaDeRevisionApiV1ReviewGet<TData = Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError = HTTPValidationError>(
- params?: ColaDeRevisionApiV1ReviewGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof colaDeRevisionApiV1ReviewGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosColaDeRevision<TData = Awaited<ReturnType<typeof registrosColaDeRevision>>, TError = HTTPValidationError>(
+ params?: RegistrosColaDeRevisionParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosColaDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getColaDeRevisionApiV1ReviewGetQueryOptions(params,options)
+  const queryOptions = getRegistrosColaDeRevisionQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -960,26 +808,7 @@ export function useColaDeRevisionApiV1ReviewGet<TData = Awaited<ReturnType<typeo
 
 
 
-export type pendientesDeRevisionApiV1ReviewCountGetResponse200 = {
-  data: RespuestaDictStrInt
-  status: 200
-}
-
-export type pendientesDeRevisionApiV1ReviewCountGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type pendientesDeRevisionApiV1ReviewCountGetResponseSuccess = (pendientesDeRevisionApiV1ReviewCountGetResponse200) & {
-  headers: Headers;
-};
-export type pendientesDeRevisionApiV1ReviewCountGetResponseError = (pendientesDeRevisionApiV1ReviewCountGetResponse422) & {
-  headers: Headers;
-};
-
-export type pendientesDeRevisionApiV1ReviewCountGetResponse = (pendientesDeRevisionApiV1ReviewCountGetResponseSuccess | pendientesDeRevisionApiV1ReviewCountGetResponseError)
-
-export const getPendientesDeRevisionApiV1ReviewCountGetUrl = () => {
+export const getRegistrosPendientesDeRevisionUrl = () => {
 
 
 
@@ -991,9 +820,9 @@ export const getPendientesDeRevisionApiV1ReviewCountGetUrl = () => {
  * Contador para el aviso de la interfaz.
  * @summary Pendientes De Revision
  */
-export const pendientesDeRevisionApiV1ReviewCountGet = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<pendientesDeRevisionApiV1ReviewCountGetResponse> => {
+export const registrosPendientesDeRevision = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaDictStrInt> => {
 
-  return peticionAlBff<pendientesDeRevisionApiV1ReviewCountGetResponse>(getPendientesDeRevisionApiV1ReviewCountGetUrl(),
+  return peticionAlBff<RespuestaDictStrInt>(getRegistrosPendientesDeRevisionUrl(),
   {
     ...options,
     method: 'GET'
@@ -1006,69 +835,69 @@ export const pendientesDeRevisionApiV1ReviewCountGet = async ( options?: Paramet
 
 
 
-export const getPendientesDeRevisionApiV1ReviewCountGetQueryKey = () => {
+export const getRegistrosPendientesDeRevisionQueryKey = () => {
     return [
     `/api/v1/review/count`
     ] as const;
     }
 
 
-export const getPendientesDeRevisionApiV1ReviewCountGetQueryOptions = <TData = Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getRegistrosPendientesDeRevisionQueryOptions = <TData = Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getPendientesDeRevisionApiV1ReviewCountGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getRegistrosPendientesDeRevisionQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>> = ({ signal }) => pendientesDeRevisionApiV1ReviewCountGet({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof registrosPendientesDeRevision>>> = ({ signal }) => registrosPendientesDeRevision({ signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PendientesDeRevisionApiV1ReviewCountGetQueryResult = NonNullable<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>>
-export type PendientesDeRevisionApiV1ReviewCountGetQueryError = HTTPValidationError
+export type RegistrosPendientesDeRevisionQueryResult = NonNullable<Awaited<ReturnType<typeof registrosPendientesDeRevision>>>
+export type RegistrosPendientesDeRevisionQueryError = HTTPValidationError
 
 
-export function usePendientesDeRevisionApiV1ReviewCountGet<TData = Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData>> & Pick<
+export function useRegistrosPendientesDeRevision<TData = Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>,
+          Awaited<ReturnType<typeof registrosPendientesDeRevision>>,
           TError,
-          Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>
+          Awaited<ReturnType<typeof registrosPendientesDeRevision>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePendientesDeRevisionApiV1ReviewCountGet<TData = Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData>> & Pick<
+export function useRegistrosPendientesDeRevision<TData = Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>,
+          Awaited<ReturnType<typeof registrosPendientesDeRevision>>,
           TError,
-          Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>
+          Awaited<ReturnType<typeof registrosPendientesDeRevision>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePendientesDeRevisionApiV1ReviewCountGet<TData = Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosPendientesDeRevision<TData = Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Pendientes De Revision
  */
 
-export function usePendientesDeRevisionApiV1ReviewCountGet<TData = Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof pendientesDeRevisionApiV1ReviewCountGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useRegistrosPendientesDeRevision<TData = Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof registrosPendientesDeRevision>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getPendientesDeRevisionApiV1ReviewCountGetQueryOptions(options)
+  const queryOptions = getRegistrosPendientesDeRevisionQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

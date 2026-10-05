@@ -36,6 +36,13 @@ export default defineConfig({
           path: "src/shared/lib/cliente-bff.ts",
           name: "peticionAlBff",
         },
+        fetch: {
+          // Sin la envoltura {data, status, headers}: el mutator ya
+          // lanza ante una respuesta de error, asi que el estado y
+          // las cabeceras no aportan nada en el camino feliz y
+          // obligarian a escribir `respuesta.data.data` en cada uso.
+          includeHttpResponseReturnType: false,
+        },
       },
       clean: true,
     },

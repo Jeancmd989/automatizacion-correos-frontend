@@ -6,4 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type RespuestaListBuzonSalidaMeta = { [key: string]: unknown } | null;
+export type EscaneosErroresDelEscaneoParams = {
+cursor?: string | null;
+/**
+ * @minimum 1
+ * @maximum 200
+ */
+limite?: number;
+};

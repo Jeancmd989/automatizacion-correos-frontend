@@ -25,10 +25,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams,
+  EscaneosErroresDelEscaneoParams,
+  EscaneosListarParams,
   HTTPValidationError,
   IniciarEscaneoEntrada,
-  ListarApiV1ScansGetParams,
   RespuestaEscaneoSalida,
   RespuestaListErrorDeProcesamientoSalida,
   RespuestaListEscaneoSalida
@@ -56,26 +56,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type listarApiV1ScansGetResponse200 = {
-  data: RespuestaListEscaneoSalida
-  status: 200
-}
-
-export type listarApiV1ScansGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type listarApiV1ScansGetResponseSuccess = (listarApiV1ScansGetResponse200) & {
-  headers: Headers;
-};
-export type listarApiV1ScansGetResponseError = (listarApiV1ScansGetResponse422) & {
-  headers: Headers;
-};
-
-export type listarApiV1ScansGetResponse = (listarApiV1ScansGetResponseSuccess | listarApiV1ScansGetResponseError)
-
-export const getListarApiV1ScansGetUrl = (params?: ListarApiV1ScansGetParams,) => {
+export const getEscaneosListarUrl = (params?: EscaneosListarParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -93,9 +74,9 @@ export const getListarApiV1ScansGetUrl = (params?: ListarApiV1ScansGetParams,) =
 /**
  * @summary Listar
  */
-export const listarApiV1ScansGet = async (params?: ListarApiV1ScansGetParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<listarApiV1ScansGetResponse> => {
+export const escaneosListar = async (params?: EscaneosListarParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListEscaneoSalida> => {
 
-  return peticionAlBff<listarApiV1ScansGetResponse>(getListarApiV1ScansGetUrl(params),
+  return peticionAlBff<RespuestaListEscaneoSalida>(getEscaneosListarUrl(params),
   {
     ...options,
     method: 'GET'
@@ -108,69 +89,69 @@ export const listarApiV1ScansGet = async (params?: ListarApiV1ScansGetParams, op
 
 
 
-export const getListarApiV1ScansGetQueryKey = (params?: ListarApiV1ScansGetParams,) => {
+export const getEscaneosListarQueryKey = (params?: EscaneosListarParams,) => {
     return [
     `/api/v1/scans`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getListarApiV1ScansGetQueryOptions = <TData = Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError = HTTPValidationError>(params?: ListarApiV1ScansGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getEscaneosListarQueryOptions = <TData = Awaited<ReturnType<typeof escaneosListar>>, TError = HTTPValidationError>(params?: EscaneosListarParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListarApiV1ScansGetQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getEscaneosListarQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listarApiV1ScansGet>>> = ({ signal }) => listarApiV1ScansGet(params, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof escaneosListar>>> = ({ signal }) => escaneosListar(params, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ListarApiV1ScansGetQueryResult = NonNullable<Awaited<ReturnType<typeof listarApiV1ScansGet>>>
-export type ListarApiV1ScansGetQueryError = HTTPValidationError
+export type EscaneosListarQueryResult = NonNullable<Awaited<ReturnType<typeof escaneosListar>>>
+export type EscaneosListarQueryError = HTTPValidationError
 
 
-export function useListarApiV1ScansGet<TData = Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError = HTTPValidationError>(
- params: undefined |  ListarApiV1ScansGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData>> & Pick<
+export function useEscaneosListar<TData = Awaited<ReturnType<typeof escaneosListar>>, TError = HTTPValidationError>(
+ params: undefined |  EscaneosListarParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarApiV1ScansGet>>,
+          Awaited<ReturnType<typeof escaneosListar>>,
           TError,
-          Awaited<ReturnType<typeof listarApiV1ScansGet>>
+          Awaited<ReturnType<typeof escaneosListar>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarApiV1ScansGet<TData = Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError = HTTPValidationError>(
- params?: ListarApiV1ScansGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData>> & Pick<
+export function useEscaneosListar<TData = Awaited<ReturnType<typeof escaneosListar>>, TError = HTTPValidationError>(
+ params?: EscaneosListarParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listarApiV1ScansGet>>,
+          Awaited<ReturnType<typeof escaneosListar>>,
           TError,
-          Awaited<ReturnType<typeof listarApiV1ScansGet>>
+          Awaited<ReturnType<typeof escaneosListar>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListarApiV1ScansGet<TData = Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError = HTTPValidationError>(
- params?: ListarApiV1ScansGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosListar<TData = Awaited<ReturnType<typeof escaneosListar>>, TError = HTTPValidationError>(
+ params?: EscaneosListarParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Listar
  */
 
-export function useListarApiV1ScansGet<TData = Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError = HTTPValidationError>(
- params?: ListarApiV1ScansGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listarApiV1ScansGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosListar<TData = Awaited<ReturnType<typeof escaneosListar>>, TError = HTTPValidationError>(
+ params?: EscaneosListarParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosListar>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getListarApiV1ScansGetQueryOptions(params,options)
+  const queryOptions = getEscaneosListarQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -182,26 +163,7 @@ export function useListarApiV1ScansGet<TData = Awaited<ReturnType<typeof listarA
 
 
 
-export type iniciarApiV1ScansPostResponse202 = {
-  data: RespuestaEscaneoSalida
-  status: 202
-}
-
-export type iniciarApiV1ScansPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type iniciarApiV1ScansPostResponseSuccess = (iniciarApiV1ScansPostResponse202) & {
-  headers: Headers;
-};
-export type iniciarApiV1ScansPostResponseError = (iniciarApiV1ScansPostResponse422) & {
-  headers: Headers;
-};
-
-export type iniciarApiV1ScansPostResponse = (iniciarApiV1ScansPostResponseSuccess | iniciarApiV1ScansPostResponseError)
-
-export const getIniciarApiV1ScansPostUrl = () => {
+export const getEscaneosIniciarUrl = () => {
 
 
 
@@ -213,7 +175,7 @@ export const getIniciarApiV1ScansPostUrl = () => {
  * Encola un escaneo. Idempotente si se envia `Idempotency-Key`.
  * @summary Iniciar
  */
-export const iniciarApiV1ScansPost = async (iniciarEscaneoEntrada: IniciarEscaneoEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<iniciarApiV1ScansPostResponse> => {
+export const escaneosIniciar = async (iniciarEscaneoEntrada: IniciarEscaneoEntrada, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaEscaneoSalida> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -229,7 +191,7 @@ export const iniciarApiV1ScansPost = async (iniciarEscaneoEntrada: IniciarEscane
     }
     return headers;
   };
-return peticionAlBff<iniciarApiV1ScansPostResponse>(getIniciarApiV1ScansPostUrl(),
+return peticionAlBff<RespuestaEscaneoSalida>(getEscaneosIniciarUrl(),
   {
     ...options,
     method: 'POST',
@@ -242,13 +204,13 @@ return peticionAlBff<iniciarApiV1ScansPostResponse>(getIniciarApiV1ScansPostUrl(
 
 
 
-export const getIniciarApiV1ScansPostMutationKey = () => ['iniciarApiV1ScansPost'] as const;
+export const getEscaneosIniciarMutationKey = () => ['escaneosIniciar'] as const;
 
-export const getIniciarApiV1ScansPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof iniciarApiV1ScansPost>>, TError,IniciarApiV1ScansPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof iniciarApiV1ScansPost>>, TError,IniciarApiV1ScansPostMutationVariables, TContext> => {
+export const getEscaneosIniciarMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof escaneosIniciar>>, TError,EscaneosIniciarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof escaneosIniciar>>, TError,EscaneosIniciarMutationVariables, TContext> => {
 
-const mutationKey = getIniciarApiV1ScansPostMutationKey();
+const mutationKey = getEscaneosIniciarMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -258,10 +220,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof iniciarApiV1ScansPost>>, IniciarApiV1ScansPostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof escaneosIniciar>>, EscaneosIniciarMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  iniciarApiV1ScansPost(data,requestOptions)
+          return  escaneosIniciar(data,requestOptions)
         }
 
 
@@ -271,44 +233,25 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type IniciarApiV1ScansPostMutationResult = NonNullable<Awaited<ReturnType<typeof iniciarApiV1ScansPost>>>
-    export type IniciarApiV1ScansPostMutationBody = IniciarEscaneoEntrada
-    export type IniciarApiV1ScansPostMutationError = HTTPValidationError
-    export type IniciarApiV1ScansPostMutationVariables = {data: IniciarEscaneoEntrada}
+    export type EscaneosIniciarMutationResult = NonNullable<Awaited<ReturnType<typeof escaneosIniciar>>>
+    export type EscaneosIniciarMutationBody = IniciarEscaneoEntrada
+    export type EscaneosIniciarMutationError = HTTPValidationError
+    export type EscaneosIniciarMutationVariables = {data: IniciarEscaneoEntrada}
 
     /**
  * @summary Iniciar
  */
-export const useIniciarApiV1ScansPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof iniciarApiV1ScansPost>>, TError,IniciarApiV1ScansPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useEscaneosIniciar = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof escaneosIniciar>>, TError,EscaneosIniciarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof iniciarApiV1ScansPost>>,
+        Awaited<ReturnType<typeof escaneosIniciar>>,
         TError,
-        IniciarApiV1ScansPostMutationVariables,
+        EscaneosIniciarMutationVariables,
         TContext
       > => {
-      return useMutation(getIniciarApiV1ScansPostMutationOptions(options), queryClient);
+      return useMutation(getEscaneosIniciarMutationOptions(options), queryClient);
     }
-    export type obtenerApiV1ScansTrabajoIdGetResponse200 = {
-  data: RespuestaEscaneoSalida
-  status: 200
-}
-
-export type obtenerApiV1ScansTrabajoIdGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type obtenerApiV1ScansTrabajoIdGetResponseSuccess = (obtenerApiV1ScansTrabajoIdGetResponse200) & {
-  headers: Headers;
-};
-export type obtenerApiV1ScansTrabajoIdGetResponseError = (obtenerApiV1ScansTrabajoIdGetResponse422) & {
-  headers: Headers;
-};
-
-export type obtenerApiV1ScansTrabajoIdGetResponse = (obtenerApiV1ScansTrabajoIdGetResponseSuccess | obtenerApiV1ScansTrabajoIdGetResponseError)
-
-export const getObtenerApiV1ScansTrabajoIdGetUrl = (trabajoId: string,) => {
+    export const getEscaneosObtenerUrl = (trabajoId: string,) => {
 
 
 
@@ -319,9 +262,9 @@ export const getObtenerApiV1ScansTrabajoIdGetUrl = (trabajoId: string,) => {
 /**
  * @summary Obtener
  */
-export const obtenerApiV1ScansTrabajoIdGet = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<obtenerApiV1ScansTrabajoIdGetResponse> => {
+export const escaneosObtener = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaEscaneoSalida> => {
 
-  return peticionAlBff<obtenerApiV1ScansTrabajoIdGetResponse>(getObtenerApiV1ScansTrabajoIdGetUrl(trabajoId),
+  return peticionAlBff<RespuestaEscaneoSalida>(getEscaneosObtenerUrl(trabajoId),
   {
     ...options,
     method: 'GET'
@@ -334,69 +277,69 @@ export const obtenerApiV1ScansTrabajoIdGet = async (trabajoId: string, options?:
 
 
 
-export const getObtenerApiV1ScansTrabajoIdGetQueryKey = (trabajoId: string,) => {
+export const getEscaneosObtenerQueryKey = (trabajoId: string,) => {
     return [
     `/api/v1/scans/${trabajoId}`
     ] as const;
     }
 
 
-export const getObtenerApiV1ScansTrabajoIdGetQueryOptions = <TData = Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError = HTTPValidationError>(trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getEscaneosObtenerQueryOptions = <TData = Awaited<ReturnType<typeof escaneosObtener>>, TError = HTTPValidationError>(trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getObtenerApiV1ScansTrabajoIdGetQueryKey(trabajoId);
+  const queryKey =  queryOptions?.queryKey ?? getEscaneosObtenerQueryKey(trabajoId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>> = ({ signal }) => obtenerApiV1ScansTrabajoIdGet(trabajoId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof escaneosObtener>>> = ({ signal }) => escaneosObtener(trabajoId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ObtenerApiV1ScansTrabajoIdGetQueryResult = NonNullable<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>>
-export type ObtenerApiV1ScansTrabajoIdGetQueryError = HTTPValidationError
+export type EscaneosObtenerQueryResult = NonNullable<Awaited<ReturnType<typeof escaneosObtener>>>
+export type EscaneosObtenerQueryError = HTTPValidationError
 
 
-export function useObtenerApiV1ScansTrabajoIdGet<TData = Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError = HTTPValidationError>(
- trabajoId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData>> & Pick<
+export function useEscaneosObtener<TData = Awaited<ReturnType<typeof escaneosObtener>>, TError = HTTPValidationError>(
+ trabajoId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>,
+          Awaited<ReturnType<typeof escaneosObtener>>,
           TError,
-          Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>
+          Awaited<ReturnType<typeof escaneosObtener>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useObtenerApiV1ScansTrabajoIdGet<TData = Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData>> & Pick<
+export function useEscaneosObtener<TData = Awaited<ReturnType<typeof escaneosObtener>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>,
+          Awaited<ReturnType<typeof escaneosObtener>>,
           TError,
-          Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>
+          Awaited<ReturnType<typeof escaneosObtener>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useObtenerApiV1ScansTrabajoIdGet<TData = Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosObtener<TData = Awaited<ReturnType<typeof escaneosObtener>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Obtener
  */
 
-export function useObtenerApiV1ScansTrabajoIdGet<TData = Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof obtenerApiV1ScansTrabajoIdGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosObtener<TData = Awaited<ReturnType<typeof escaneosObtener>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosObtener>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getObtenerApiV1ScansTrabajoIdGetQueryOptions(trabajoId,options)
+  const queryOptions = getEscaneosObtenerQueryOptions(trabajoId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -408,26 +351,7 @@ export function useObtenerApiV1ScansTrabajoIdGet<TData = Awaited<ReturnType<type
 
 
 
-export type cancelarApiV1ScansTrabajoIdCancelPostResponse200 = {
-  data: RespuestaEscaneoSalida
-  status: 200
-}
-
-export type cancelarApiV1ScansTrabajoIdCancelPostResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type cancelarApiV1ScansTrabajoIdCancelPostResponseSuccess = (cancelarApiV1ScansTrabajoIdCancelPostResponse200) & {
-  headers: Headers;
-};
-export type cancelarApiV1ScansTrabajoIdCancelPostResponseError = (cancelarApiV1ScansTrabajoIdCancelPostResponse422) & {
-  headers: Headers;
-};
-
-export type cancelarApiV1ScansTrabajoIdCancelPostResponse = (cancelarApiV1ScansTrabajoIdCancelPostResponseSuccess | cancelarApiV1ScansTrabajoIdCancelPostResponseError)
-
-export const getCancelarApiV1ScansTrabajoIdCancelPostUrl = (trabajoId: string,) => {
+export const getEscaneosCancelarUrl = (trabajoId: string,) => {
 
 
 
@@ -438,9 +362,9 @@ export const getCancelarApiV1ScansTrabajoIdCancelPostUrl = (trabajoId: string,) 
 /**
  * @summary Cancelar
  */
-export const cancelarApiV1ScansTrabajoIdCancelPost = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<cancelarApiV1ScansTrabajoIdCancelPostResponse> => {
+export const escaneosCancelar = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaEscaneoSalida> => {
 
-  return peticionAlBff<cancelarApiV1ScansTrabajoIdCancelPostResponse>(getCancelarApiV1ScansTrabajoIdCancelPostUrl(trabajoId),
+  return peticionAlBff<RespuestaEscaneoSalida>(getEscaneosCancelarUrl(trabajoId),
   {
     ...options,
     method: 'POST'
@@ -453,13 +377,13 @@ export const cancelarApiV1ScansTrabajoIdCancelPost = async (trabajoId: string, o
 
 
 
-export const getCancelarApiV1ScansTrabajoIdCancelPostMutationKey = () => ['cancelarApiV1ScansTrabajoIdCancelPost'] as const;
+export const getEscaneosCancelarMutationKey = () => ['escaneosCancelar'] as const;
 
-export const getCancelarApiV1ScansTrabajoIdCancelPostMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>, TError,CancelarApiV1ScansTrabajoIdCancelPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
-): UseMutationOptions<Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>, TError,CancelarApiV1ScansTrabajoIdCancelPostMutationVariables, TContext> => {
+export const getEscaneosCancelarMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof escaneosCancelar>>, TError,EscaneosCancelarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+): UseMutationOptions<Awaited<ReturnType<typeof escaneosCancelar>>, TError,EscaneosCancelarMutationVariables, TContext> => {
 
-const mutationKey = getCancelarApiV1ScansTrabajoIdCancelPostMutationKey();
+const mutationKey = getEscaneosCancelarMutationKey();
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -469,10 +393,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>, CancelarApiV1ScansTrabajoIdCancelPostMutationVariables> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof escaneosCancelar>>, EscaneosCancelarMutationVariables> = (props) => {
           const {trabajoId} = props ?? {};
 
-          return  cancelarApiV1ScansTrabajoIdCancelPost(trabajoId,requestOptions)
+          return  escaneosCancelar(trabajoId,requestOptions)
         }
 
 
@@ -482,45 +406,26 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CancelarApiV1ScansTrabajoIdCancelPostMutationResult = NonNullable<Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>>
+    export type EscaneosCancelarMutationResult = NonNullable<Awaited<ReturnType<typeof escaneosCancelar>>>
 
-    export type CancelarApiV1ScansTrabajoIdCancelPostMutationError = HTTPValidationError
-    export type CancelarApiV1ScansTrabajoIdCancelPostMutationVariables = {trabajoId: string}
+    export type EscaneosCancelarMutationError = HTTPValidationError
+    export type EscaneosCancelarMutationVariables = {trabajoId: string}
 
     /**
  * @summary Cancelar
  */
-export const useCancelarApiV1ScansTrabajoIdCancelPost = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>, TError,CancelarApiV1ScansTrabajoIdCancelPostMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
+export const useEscaneosCancelar = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof escaneosCancelar>>, TError,EscaneosCancelarMutationVariables, TContext>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof cancelarApiV1ScansTrabajoIdCancelPost>>,
+        Awaited<ReturnType<typeof escaneosCancelar>>,
         TError,
-        CancelarApiV1ScansTrabajoIdCancelPostMutationVariables,
+        EscaneosCancelarMutationVariables,
         TContext
       > => {
-      return useMutation(getCancelarApiV1ScansTrabajoIdCancelPostMutationOptions(options), queryClient);
+      return useMutation(getEscaneosCancelarMutationOptions(options), queryClient);
     }
-    export type erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse200 = {
-  data: RespuestaListErrorDeProcesamientoSalida
-  status: 200
-}
-
-export type erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponseSuccess = (erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse200) & {
-  headers: Headers;
-};
-export type erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponseError = (erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse422) & {
-  headers: Headers;
-};
-
-export type erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse = (erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponseSuccess | erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponseError)
-
-export const getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetUrl = (trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams,) => {
+    export const getEscaneosErroresDelEscaneoUrl = (trabajoId: string,
+    params?: EscaneosErroresDelEscaneoParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -538,10 +443,10 @@ export const getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetUrl = (trabajoId: s
 /**
  * @summary Errores Del Escaneo
  */
-export const erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet = async (trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse> => {
+export const escaneosErroresDelEscaneo = async (trabajoId: string,
+    params?: EscaneosErroresDelEscaneoParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListErrorDeProcesamientoSalida> => {
 
-  return peticionAlBff<erroresDelEscaneoApiV1ScansTrabajoIdErrorsGetResponse>(getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetUrl(trabajoId,params),
+  return peticionAlBff<RespuestaListErrorDeProcesamientoSalida>(getEscaneosErroresDelEscaneoUrl(trabajoId,params),
   {
     ...options,
     method: 'GET'
@@ -554,75 +459,75 @@ export const erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet = async (trabajoId: s
 
 
 
-export const getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryKey = (trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams,) => {
+export const getEscaneosErroresDelEscaneoQueryKey = (trabajoId: string,
+    params?: EscaneosErroresDelEscaneoParams,) => {
     return [
     `/api/v1/scans/${trabajoId}/errors`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryOptions = <TData = Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError = HTTPValidationError>(trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getEscaneosErroresDelEscaneoQueryOptions = <TData = Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError = HTTPValidationError>(trabajoId: string,
+    params?: EscaneosErroresDelEscaneoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryKey(trabajoId,params);
+  const queryKey =  queryOptions?.queryKey ?? getEscaneosErroresDelEscaneoQueryKey(trabajoId,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>> = ({ signal }) => erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet(trabajoId,params, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>> = ({ signal }) => escaneosErroresDelEscaneo(trabajoId,params, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryResult = NonNullable<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>>
-export type ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryError = HTTPValidationError
+export type EscaneosErroresDelEscaneoQueryResult = NonNullable<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>>
+export type EscaneosErroresDelEscaneoQueryError = HTTPValidationError
 
 
-export function useErroresDelEscaneoApiV1ScansTrabajoIdErrorsGet<TData = Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError = HTTPValidationError>(
+export function useEscaneosErroresDelEscaneo<TData = Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError = HTTPValidationError>(
  trabajoId: string,
-    params: undefined |  ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData>> & Pick<
+    params: undefined |  EscaneosErroresDelEscaneoParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>,
+          Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>,
           TError,
-          Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>
+          Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useErroresDelEscaneoApiV1ScansTrabajoIdErrorsGet<TData = Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError = HTTPValidationError>(
+export function useEscaneosErroresDelEscaneo<TData = Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError = HTTPValidationError>(
  trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData>> & Pick<
+    params?: EscaneosErroresDelEscaneoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>,
+          Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>,
           TError,
-          Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>
+          Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useErroresDelEscaneoApiV1ScansTrabajoIdErrorsGet<TData = Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError = HTTPValidationError>(
+export function useEscaneosErroresDelEscaneo<TData = Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError = HTTPValidationError>(
  trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+    params?: EscaneosErroresDelEscaneoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Errores Del Escaneo
  */
 
-export function useErroresDelEscaneoApiV1ScansTrabajoIdErrorsGet<TData = Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError = HTTPValidationError>(
+export function useEscaneosErroresDelEscaneo<TData = Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError = HTTPValidationError>(
  trabajoId: string,
-    params?: ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof erroresDelEscaneoApiV1ScansTrabajoIdErrorsGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+    params?: EscaneosErroresDelEscaneoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosErroresDelEscaneo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetQueryOptions(trabajoId,params,options)
+  const queryOptions = getEscaneosErroresDelEscaneoQueryOptions(trabajoId,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -634,26 +539,7 @@ export function useErroresDelEscaneoApiV1ScansTrabajoIdErrorsGet<TData = Awaited
 
 
 
-export type transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse200 = {
-  data: unknown
-  status: 200
-}
-
-export type transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type transmitirProgresoApiV1ScansTrabajoIdStreamGetResponseSuccess = (transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse200) & {
-  headers: Headers;
-};
-export type transmitirProgresoApiV1ScansTrabajoIdStreamGetResponseError = (transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse422) & {
-  headers: Headers;
-};
-
-export type transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse = (transmitirProgresoApiV1ScansTrabajoIdStreamGetResponseSuccess | transmitirProgresoApiV1ScansTrabajoIdStreamGetResponseError)
-
-export const getTransmitirProgresoApiV1ScansTrabajoIdStreamGetUrl = (trabajoId: string,) => {
+export const getEscaneosTransmitirProgresoUrl = (trabajoId: string,) => {
 
 
 
@@ -669,9 +555,9 @@ export const getTransmitirProgresoApiV1ScansTrabajoIdStreamGetUrl = (trabajoId: 
  * 403 que el cliente interprete correctamente.
  * @summary Transmitir Progreso
  */
-export const transmitirProgresoApiV1ScansTrabajoIdStreamGet = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse> => {
+export const escaneosTransmitirProgreso = async (trabajoId: string, options?: Parameters<typeof peticionAlBff>[1]): Promise<unknown> => {
 
-  return peticionAlBff<transmitirProgresoApiV1ScansTrabajoIdStreamGetResponse>(getTransmitirProgresoApiV1ScansTrabajoIdStreamGetUrl(trabajoId),
+  return peticionAlBff<unknown>(getEscaneosTransmitirProgresoUrl(trabajoId),
   {
     ...options,
     method: 'GET'
@@ -684,69 +570,69 @@ export const transmitirProgresoApiV1ScansTrabajoIdStreamGet = async (trabajoId: 
 
 
 
-export const getTransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryKey = (trabajoId: string,) => {
+export const getEscaneosTransmitirProgresoQueryKey = (trabajoId: string,) => {
     return [
     `/api/v1/scans/${trabajoId}/stream`
     ] as const;
     }
 
 
-export const getTransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryOptions = <TData = Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError = HTTPValidationError>(trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getEscaneosTransmitirProgresoQueryOptions = <TData = Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError = HTTPValidationError>(trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getTransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryKey(trabajoId);
+  const queryKey =  queryOptions?.queryKey ?? getEscaneosTransmitirProgresoQueryKey(trabajoId);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>> = ({ signal }) => transmitirProgresoApiV1ScansTrabajoIdStreamGet(trabajoId, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>> = ({ signal }) => escaneosTransmitirProgreso(trabajoId, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: trabajoId !== null && trabajoId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type TransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryResult = NonNullable<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>>
-export type TransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryError = HTTPValidationError
+export type EscaneosTransmitirProgresoQueryResult = NonNullable<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>>
+export type EscaneosTransmitirProgresoQueryError = HTTPValidationError
 
 
-export function useTransmitirProgresoApiV1ScansTrabajoIdStreamGet<TData = Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError = HTTPValidationError>(
- trabajoId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData>> & Pick<
+export function useEscaneosTransmitirProgreso<TData = Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError = HTTPValidationError>(
+ trabajoId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>,
+          Awaited<ReturnType<typeof escaneosTransmitirProgreso>>,
           TError,
-          Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>
+          Awaited<ReturnType<typeof escaneosTransmitirProgreso>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTransmitirProgresoApiV1ScansTrabajoIdStreamGet<TData = Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData>> & Pick<
+export function useEscaneosTransmitirProgreso<TData = Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>,
+          Awaited<ReturnType<typeof escaneosTransmitirProgreso>>,
           TError,
-          Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>
+          Awaited<ReturnType<typeof escaneosTransmitirProgreso>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTransmitirProgresoApiV1ScansTrabajoIdStreamGet<TData = Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosTransmitirProgreso<TData = Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Transmitir Progreso
  */
 
-export function useTransmitirProgresoApiV1ScansTrabajoIdStreamGet<TData = Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError = HTTPValidationError>(
- trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof transmitirProgresoApiV1ScansTrabajoIdStreamGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useEscaneosTransmitirProgreso<TData = Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError = HTTPValidationError>(
+ trabajoId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof escaneosTransmitirProgreso>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getTransmitirProgresoApiV1ScansTrabajoIdStreamGetQueryOptions(trabajoId,options)
+  const queryOptions = getEscaneosTransmitirProgresoQueryOptions(trabajoId,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

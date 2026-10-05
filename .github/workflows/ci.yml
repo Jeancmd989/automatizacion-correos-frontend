@@ -26,8 +26,12 @@ permissions:
   contents: read
 
 jobs:
-  calidad:
-    name: Linting, tipado y tests
+  # Linting, tipado, tests y auditoria en un solo trabajo: los cuatro
+  # necesitan el mismo `npm ci`, y repartirlos multiplicaba esa
+  # instalacion sin ganar nada. Cada paso lleva nombre propio, asi que
+  # un fallo sigue siendo localizable sin abrir el log.
+  verificacion:
+    name: Verificacion
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -47,6 +51,28 @@ jobs:
 
       - name: Tests
         run: npm run test
+
+      # Dos auditorias con distinto rigor, a proposito.
+      #
+      # Produccion: tolerancia cero desde severidad moderada. Es el
+      # codigo que se sirve al navegador.
+      #
+      # Desarrollo: solo se corta ante criticas. Quedan avisos de
+      # severidad alta en la cadena de `eslint-config-next`
+      # (fast-glob -> micromatch -> braces) SIN version parcheada
+      # disponible: el rango afectado es `*`. Hacer fallar el pipeline
+      # por algo que nadie puede arreglar solo entrena al equipo a
+      # ignorar el trabajo en rojo.
+      - name: Dependencias de produccion
+        run: npm audit --omit=dev --audit-level=moderate
+
+      - name: Dependencias de desarrollo
+        run: npm audit --audit-level=critical
+
+      - name: Buscar secretos en el historial
+        uses: gitleaks/gitleaks-action@v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   contrato:
     name: Contrato de API sincronizado
@@ -72,7 +98,7 @@ jobs:
   build:
     name: Construccion
     runs-on: ubuntu-latest
-    needs: [calidad]
+    needs: [verificacion]
     steps:
       - uses: actions/checkout@v4
 
@@ -102,38 +128,3 @@ jobs:
           OIDC_CLIENT_SECRET: ci
           OIDC_AUDIENCE: https://api.ejemplo.com
 
-  seguridad:
-    name: Dependencias y secretos
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - run: npm ci
-
-      # Dos auditorias con distinto rigor, a proposito.
-      #
-      # Produccion: tolerancia cero desde severidad moderada. Es el
-      # codigo que se sirve al navegador.
-      #
-      # Desarrollo: solo se corta ante criticas. A dia de hoy quedan
-      # avisos de severidad alta en la cadena de `eslint-config-next`
-      # (fast-glob -> micromatch -> braces) SIN version parcheada
-      # disponible: el rango afectado es `*`. Las `overrides` del
-      # package.json ya fuerzan lo ultimo publicado. Hacer fallar el
-      # pipeline por algo que nadie puede arreglar solo entrena al
-      # equipo a ignorar el trabajo en rojo.
-      - name: Dependencias de produccion
-        run: npm audit --omit=dev --audit-level=moderate
-
-      - name: Dependencias de desarrollo
-        run: npm audit --audit-level=critical
-
-      - name: Buscar secretos en el historial
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

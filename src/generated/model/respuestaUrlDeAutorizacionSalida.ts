@@ -5,11 +5,11 @@
  * Ingesta de adjuntos de correo y extraccion de datos tributarios. Todas las rutas requieren un token OIDC salvo las sondas de salud.
  * OpenAPI spec version: 0.1.0
  */
-import type { RespuestaUrlDeAutorizacionSalidaMeta } from './respuestaUrlDeAutorizacionSalidaMeta';
+import type { MetaDePagina } from './metaDePagina';
 import type { UrlDeAutorizacionSalida } from './urlDeAutorizacionSalida';
 
 export interface RespuestaUrlDeAutorizacionSalida {
   data: UrlDeAutorizacionSalida;
-  meta?: RespuestaUrlDeAutorizacionSalidaMeta;
+  meta?: MetaDePagina | null;
   status?: string;
 }

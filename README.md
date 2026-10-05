@@ -116,9 +116,15 @@ contrato, no una prueba escrita a mano.
 ```
 src/
 ├── app/           Rutas (App Router) — solo composición
-│   └── api/bff/   Backend for Frontend: sesión, OIDC y proxy  (Fase 6)
-├── features/      Feature-sliced: cada carpeta es autocontenida  (Fase 6)
-│   └── <feature>/{components,hooks,api,schemas}
+│   ├── api/auth/  login OIDC, callback y logout
+│   ├── api/bff/   proxy al backend con el token del lado servidor
+│   └── (panel)/   páginas protegidas por la sesión
+├── features/      Feature-sliced: cada carpeta es autocontenida
+│   ├── escaneos/   lanzar, seguir en vivo (SSE), historial
+│   ├── revision/   cola de revisión y corrección
+│   ├── registros/  listado con filtros y cursor
+│   ├── reportes/   exportación asíncrona
+│   └── buzones/    vincular y desvincular cuentas
 ├── shared/
 │   ├── config/    configuración de entorno validada
 │   ├── lib/       cliente del BFF, utilidades
@@ -136,7 +142,12 @@ referencia: cada feature expone dos o tres hooks pequeños y testeables.
 
 **El access token nunca llega al navegador.** El login OIDC se completa en route handlers
 del servidor; el navegador solo recibe una cookie de sesión `httpOnly`, `Secure`,
-`SameSite=Lax`. Las llamadas pasan por el BFF, que adjunta el token del lado servidor.
+`SameSite=Lax`. Las llamadas pasan por el BFF, que adjunta el token del lado servidor y
+lo refresca de forma transparente antes de que venza.
+
+**El proxy del BFF tiene allowlist de prefijos.** Sin ella sería un proxy abierto:
+cualquiera con sesión podría alcanzar rutas internas del backend pasando por aquí. Se
+permite exactamente lo que la interfaz usa.
 
 Esto elimina una clase entera de ataques: con el token en memoria accesible desde
 JavaScript —como ocurre con las librerías OIDC de cliente habituales—, cualquier XSS lo

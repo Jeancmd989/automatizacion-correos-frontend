@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { EntradaDeAuditoriaSalida } from './entradaDeAuditoriaSalida';
-import type { RespuestaListEntradaDeAuditoriaSalidaMeta } from './respuestaListEntradaDeAuditoriaSalidaMeta';
+import type { MetaDePagina } from './metaDePagina';
 
 export interface RespuestaListEntradaDeAuditoriaSalida {
   data: EntradaDeAuditoriaSalida[];
-  meta?: RespuestaListEntradaDeAuditoriaSalidaMeta;
+  meta?: MetaDePagina | null;
   status?: string;
 }

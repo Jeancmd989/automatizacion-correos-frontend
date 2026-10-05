@@ -46,19 +46,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type vivoHealthLiveGetResponse200 = {
-  data: RespuestaSaludSalida
-  status: 200
-}
-
-export type vivoHealthLiveGetResponseSuccess = (vivoHealthLiveGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type vivoHealthLiveGetResponse = (vivoHealthLiveGetResponseSuccess)
-
-export const getVivoHealthLiveGetUrl = () => {
+export const getSaludVivoUrl = () => {
 
 
 
@@ -70,9 +58,9 @@ export const getVivoHealthLiveGetUrl = () => {
  * Responde si el proceso esta en pie. Sin dependencias externas.
  * @summary Vivo
  */
-export const vivoHealthLiveGet = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<vivoHealthLiveGetResponse> => {
+export const saludVivo = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaSaludSalida> => {
 
-  return peticionAlBff<vivoHealthLiveGetResponse>(getVivoHealthLiveGetUrl(),
+  return peticionAlBff<RespuestaSaludSalida>(getSaludVivoUrl(),
   {
     ...options,
     method: 'GET'
@@ -85,69 +73,69 @@ export const vivoHealthLiveGet = async ( options?: Parameters<typeof peticionAlB
 
 
 
-export const getVivoHealthLiveGetQueryKey = () => {
+export const getSaludVivoQueryKey = () => {
     return [
     `/health/live`
     ] as const;
     }
 
 
-export const getVivoHealthLiveGetQueryOptions = <TData = Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getSaludVivoQueryOptions = <TData = Awaited<ReturnType<typeof saludVivo>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getVivoHealthLiveGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getSaludVivoQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof vivoHealthLiveGet>>> = ({ signal }) => vivoHealthLiveGet({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof saludVivo>>> = ({ signal }) => saludVivo({ signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type VivoHealthLiveGetQueryResult = NonNullable<Awaited<ReturnType<typeof vivoHealthLiveGet>>>
-export type VivoHealthLiveGetQueryError = unknown
+export type SaludVivoQueryResult = NonNullable<Awaited<ReturnType<typeof saludVivo>>>
+export type SaludVivoQueryError = unknown
 
 
-export function useVivoHealthLiveGet<TData = Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData>> & Pick<
+export function useSaludVivo<TData = Awaited<ReturnType<typeof saludVivo>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof vivoHealthLiveGet>>,
+          Awaited<ReturnType<typeof saludVivo>>,
           TError,
-          Awaited<ReturnType<typeof vivoHealthLiveGet>>
+          Awaited<ReturnType<typeof saludVivo>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVivoHealthLiveGet<TData = Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData>> & Pick<
+export function useSaludVivo<TData = Awaited<ReturnType<typeof saludVivo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof vivoHealthLiveGet>>,
+          Awaited<ReturnType<typeof saludVivo>>,
           TError,
-          Awaited<ReturnType<typeof vivoHealthLiveGet>>
+          Awaited<ReturnType<typeof saludVivo>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useVivoHealthLiveGet<TData = Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useSaludVivo<TData = Awaited<ReturnType<typeof saludVivo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Vivo
  */
 
-export function useVivoHealthLiveGet<TData = Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof vivoHealthLiveGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useSaludVivo<TData = Awaited<ReturnType<typeof saludVivo>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludVivo>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getVivoHealthLiveGetQueryOptions(options)
+  const queryOptions = getSaludVivoQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -159,19 +147,7 @@ export function useVivoHealthLiveGet<TData = Awaited<ReturnType<typeof vivoHealt
 
 
 
-export type preparadoHealthReadyGetResponse200 = {
-  data: RespuestaSaludSalida
-  status: 200
-}
-
-export type preparadoHealthReadyGetResponseSuccess = (preparadoHealthReadyGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type preparadoHealthReadyGetResponse = (preparadoHealthReadyGetResponseSuccess)
-
-export const getPreparadoHealthReadyGetUrl = () => {
+export const getSaludPreparadoUrl = () => {
 
 
 
@@ -183,9 +159,9 @@ export const getPreparadoHealthReadyGetUrl = () => {
  * Comprueba base de datos, Redis y almacenamiento, en paralelo.
  * @summary Preparado
  */
-export const preparadoHealthReadyGet = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<preparadoHealthReadyGetResponse> => {
+export const saludPreparado = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaSaludSalida> => {
 
-  return peticionAlBff<preparadoHealthReadyGetResponse>(getPreparadoHealthReadyGetUrl(),
+  return peticionAlBff<RespuestaSaludSalida>(getSaludPreparadoUrl(),
   {
     ...options,
     method: 'GET'
@@ -198,69 +174,69 @@ export const preparadoHealthReadyGet = async ( options?: Parameters<typeof petic
 
 
 
-export const getPreparadoHealthReadyGetQueryKey = () => {
+export const getSaludPreparadoQueryKey = () => {
     return [
     `/health/ready`
     ] as const;
     }
 
 
-export const getPreparadoHealthReadyGetQueryOptions = <TData = Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getSaludPreparadoQueryOptions = <TData = Awaited<ReturnType<typeof saludPreparado>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getPreparadoHealthReadyGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getSaludPreparadoQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof preparadoHealthReadyGet>>> = ({ signal }) => preparadoHealthReadyGet({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof saludPreparado>>> = ({ signal }) => saludPreparado({ signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PreparadoHealthReadyGetQueryResult = NonNullable<Awaited<ReturnType<typeof preparadoHealthReadyGet>>>
-export type PreparadoHealthReadyGetQueryError = unknown
+export type SaludPreparadoQueryResult = NonNullable<Awaited<ReturnType<typeof saludPreparado>>>
+export type SaludPreparadoQueryError = unknown
 
 
-export function usePreparadoHealthReadyGet<TData = Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData>> & Pick<
+export function useSaludPreparado<TData = Awaited<ReturnType<typeof saludPreparado>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof preparadoHealthReadyGet>>,
+          Awaited<ReturnType<typeof saludPreparado>>,
           TError,
-          Awaited<ReturnType<typeof preparadoHealthReadyGet>>
+          Awaited<ReturnType<typeof saludPreparado>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePreparadoHealthReadyGet<TData = Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData>> & Pick<
+export function useSaludPreparado<TData = Awaited<ReturnType<typeof saludPreparado>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof preparadoHealthReadyGet>>,
+          Awaited<ReturnType<typeof saludPreparado>>,
           TError,
-          Awaited<ReturnType<typeof preparadoHealthReadyGet>>
+          Awaited<ReturnType<typeof saludPreparado>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePreparadoHealthReadyGet<TData = Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useSaludPreparado<TData = Awaited<ReturnType<typeof saludPreparado>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Preparado
  */
 
-export function usePreparadoHealthReadyGet<TData = Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof preparadoHealthReadyGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function useSaludPreparado<TData = Awaited<ReturnType<typeof saludPreparado>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof saludPreparado>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getPreparadoHealthReadyGetQueryOptions(options)
+  const queryOptions = getSaludPreparadoQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

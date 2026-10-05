@@ -6,11 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type ErroresDelEscaneoApiV1ScansTrabajoIdErrorsGetParams = {
-cursor?: string | null;
 /**
- * @minimum 1
- * @maximum 200
+ * Metadatos de paginacion. Presentes solo en los listados.
  */
-limite?: number;
-};
+export interface MetaDePagina {
+  cursor?: string | null;
+  hay_mas?: boolean;
+}

@@ -21,8 +21,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  AuditoriaApiV1AuditGetParams,
   HTTPValidationError,
+  PerfilAuditoriaParams,
   RespuestaListEntradaDeAuditoriaSalida,
   RespuestaPerfilSalida
 } from '../../model';
@@ -49,26 +49,7 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type auditoriaApiV1AuditGetResponse200 = {
-  data: RespuestaListEntradaDeAuditoriaSalida
-  status: 200
-}
-
-export type auditoriaApiV1AuditGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type auditoriaApiV1AuditGetResponseSuccess = (auditoriaApiV1AuditGetResponse200) & {
-  headers: Headers;
-};
-export type auditoriaApiV1AuditGetResponseError = (auditoriaApiV1AuditGetResponse422) & {
-  headers: Headers;
-};
-
-export type auditoriaApiV1AuditGetResponse = (auditoriaApiV1AuditGetResponseSuccess | auditoriaApiV1AuditGetResponseError)
-
-export const getAuditoriaApiV1AuditGetUrl = (params?: AuditoriaApiV1AuditGetParams,) => {
+export const getPerfilAuditoriaUrl = (params?: PerfilAuditoriaParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -87,9 +68,9 @@ export const getAuditoriaApiV1AuditGetUrl = (params?: AuditoriaApiV1AuditGetPara
  * Bitacora del tenant. Requiere rol administrativo.
  * @summary Auditoria
  */
-export const auditoriaApiV1AuditGet = async (params?: AuditoriaApiV1AuditGetParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<auditoriaApiV1AuditGetResponse> => {
+export const perfilAuditoria = async (params?: PerfilAuditoriaParams, options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaListEntradaDeAuditoriaSalida> => {
 
-  return peticionAlBff<auditoriaApiV1AuditGetResponse>(getAuditoriaApiV1AuditGetUrl(params),
+  return peticionAlBff<RespuestaListEntradaDeAuditoriaSalida>(getPerfilAuditoriaUrl(params),
   {
     ...options,
     method: 'GET'
@@ -102,69 +83,69 @@ export const auditoriaApiV1AuditGet = async (params?: AuditoriaApiV1AuditGetPara
 
 
 
-export const getAuditoriaApiV1AuditGetQueryKey = (params?: AuditoriaApiV1AuditGetParams,) => {
+export const getPerfilAuditoriaQueryKey = (params?: PerfilAuditoriaParams,) => {
     return [
     `/api/v1/audit`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getAuditoriaApiV1AuditGetQueryOptions = <TData = Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError = HTTPValidationError>(params?: AuditoriaApiV1AuditGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getPerfilAuditoriaQueryOptions = <TData = Awaited<ReturnType<typeof perfilAuditoria>>, TError = HTTPValidationError>(params?: PerfilAuditoriaParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getAuditoriaApiV1AuditGetQueryKey(params);
+  const queryKey =  queryOptions?.queryKey ?? getPerfilAuditoriaQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>> = ({ signal }) => auditoriaApiV1AuditGet(params, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof perfilAuditoria>>> = ({ signal }) => perfilAuditoria(params, { signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type AuditoriaApiV1AuditGetQueryResult = NonNullable<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>>
-export type AuditoriaApiV1AuditGetQueryError = HTTPValidationError
+export type PerfilAuditoriaQueryResult = NonNullable<Awaited<ReturnType<typeof perfilAuditoria>>>
+export type PerfilAuditoriaQueryError = HTTPValidationError
 
 
-export function useAuditoriaApiV1AuditGet<TData = Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError = HTTPValidationError>(
- params: undefined |  AuditoriaApiV1AuditGetParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData>> & Pick<
+export function usePerfilAuditoria<TData = Awaited<ReturnType<typeof perfilAuditoria>>, TError = HTTPValidationError>(
+ params: undefined |  PerfilAuditoriaParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>,
+          Awaited<ReturnType<typeof perfilAuditoria>>,
           TError,
-          Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>
+          Awaited<ReturnType<typeof perfilAuditoria>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAuditoriaApiV1AuditGet<TData = Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError = HTTPValidationError>(
- params?: AuditoriaApiV1AuditGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData>> & Pick<
+export function usePerfilAuditoria<TData = Awaited<ReturnType<typeof perfilAuditoria>>, TError = HTTPValidationError>(
+ params?: PerfilAuditoriaParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>,
+          Awaited<ReturnType<typeof perfilAuditoria>>,
           TError,
-          Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>
+          Awaited<ReturnType<typeof perfilAuditoria>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useAuditoriaApiV1AuditGet<TData = Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError = HTTPValidationError>(
- params?: AuditoriaApiV1AuditGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function usePerfilAuditoria<TData = Awaited<ReturnType<typeof perfilAuditoria>>, TError = HTTPValidationError>(
+ params?: PerfilAuditoriaParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Auditoria
  */
 
-export function useAuditoriaApiV1AuditGet<TData = Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError = HTTPValidationError>(
- params?: AuditoriaApiV1AuditGetParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof auditoriaApiV1AuditGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function usePerfilAuditoria<TData = Awaited<ReturnType<typeof perfilAuditoria>>, TError = HTTPValidationError>(
+ params?: PerfilAuditoriaParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilAuditoria>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getAuditoriaApiV1AuditGetQueryOptions(params,options)
+  const queryOptions = getPerfilAuditoriaQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -176,26 +157,7 @@ export function useAuditoriaApiV1AuditGet<TData = Awaited<ReturnType<typeof audi
 
 
 
-export type perfilApiV1MeGetResponse200 = {
-  data: RespuestaPerfilSalida
-  status: 200
-}
-
-export type perfilApiV1MeGetResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-
-export type perfilApiV1MeGetResponseSuccess = (perfilApiV1MeGetResponse200) & {
-  headers: Headers;
-};
-export type perfilApiV1MeGetResponseError = (perfilApiV1MeGetResponse422) & {
-  headers: Headers;
-};
-
-export type perfilApiV1MeGetResponse = (perfilApiV1MeGetResponseSuccess | perfilApiV1MeGetResponseError)
-
-export const getPerfilApiV1MeGetUrl = () => {
+export const getPerfilPerfilUrl = () => {
 
 
 
@@ -206,9 +168,9 @@ export const getPerfilApiV1MeGetUrl = () => {
 /**
  * @summary Perfil
  */
-export const perfilApiV1MeGet = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<perfilApiV1MeGetResponse> => {
+export const perfilPerfil = async ( options?: Parameters<typeof peticionAlBff>[1]): Promise<RespuestaPerfilSalida> => {
 
-  return peticionAlBff<perfilApiV1MeGetResponse>(getPerfilApiV1MeGetUrl(),
+  return peticionAlBff<RespuestaPerfilSalida>(getPerfilPerfilUrl(),
   {
     ...options,
     method: 'GET'
@@ -221,69 +183,69 @@ export const perfilApiV1MeGet = async ( options?: Parameters<typeof peticionAlBf
 
 
 
-export const getPerfilApiV1MeGetQueryKey = () => {
+export const getPerfilPerfilQueryKey = () => {
     return [
     `/api/v1/me`
     ] as const;
     }
 
 
-export const getPerfilApiV1MeGetQueryOptions = <TData = Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export const getPerfilPerfilQueryOptions = <TData = Awaited<ReturnType<typeof perfilPerfil>>, TError = HTTPValidationError>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getPerfilApiV1MeGetQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getPerfilPerfilQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof perfilApiV1MeGet>>> = ({ signal }) => perfilApiV1MeGet({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof perfilPerfil>>> = ({ signal }) => perfilPerfil({ signal, ...requestOptions });
 
 
 
 
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type PerfilApiV1MeGetQueryResult = NonNullable<Awaited<ReturnType<typeof perfilApiV1MeGet>>>
-export type PerfilApiV1MeGetQueryError = HTTPValidationError
+export type PerfilPerfilQueryResult = NonNullable<Awaited<ReturnType<typeof perfilPerfil>>>
+export type PerfilPerfilQueryError = HTTPValidationError
 
 
-export function usePerfilApiV1MeGet<TData = Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError = HTTPValidationError>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData>> & Pick<
+export function usePerfilPerfil<TData = Awaited<ReturnType<typeof perfilPerfil>>, TError = HTTPValidationError>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof perfilApiV1MeGet>>,
+          Awaited<ReturnType<typeof perfilPerfil>>,
           TError,
-          Awaited<ReturnType<typeof perfilApiV1MeGet>>
+          Awaited<ReturnType<typeof perfilPerfil>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePerfilApiV1MeGet<TData = Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData>> & Pick<
+export function usePerfilPerfil<TData = Awaited<ReturnType<typeof perfilPerfil>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof perfilApiV1MeGet>>,
+          Awaited<ReturnType<typeof perfilPerfil>>,
           TError,
-          Awaited<ReturnType<typeof perfilApiV1MeGet>>
+          Awaited<ReturnType<typeof perfilPerfil>>
         > , 'initialData'
       >, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function usePerfilApiV1MeGet<TData = Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function usePerfilPerfil<TData = Awaited<ReturnType<typeof perfilPerfil>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Perfil
  */
 
-export function usePerfilApiV1MeGet<TData = Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError = HTTPValidationError>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilApiV1MeGet>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
+export function usePerfilPerfil<TData = Awaited<ReturnType<typeof perfilPerfil>>, TError = HTTPValidationError>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof perfilPerfil>>, TError, TData>>, request?: SecondParameter<typeof peticionAlBff>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getPerfilApiV1MeGetQueryOptions(options)
+  const queryOptions = getPerfilPerfilQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

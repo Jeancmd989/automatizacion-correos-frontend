@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ErrorDeProcesamientoSalida } from './errorDeProcesamientoSalida';
-import type { RespuestaListErrorDeProcesamientoSalidaMeta } from './respuestaListErrorDeProcesamientoSalidaMeta';
+import type { MetaDePagina } from './metaDePagina';
 
 export interface RespuestaListErrorDeProcesamientoSalida {
   data: ErrorDeProcesamientoSalida[];
-  meta?: RespuestaListErrorDeProcesamientoSalidaMeta;
+  meta?: MetaDePagina | null;
   status?: string;
 }

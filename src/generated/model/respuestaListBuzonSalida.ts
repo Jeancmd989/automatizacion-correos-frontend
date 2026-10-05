@@ -6,10 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { BuzonSalida } from './buzonSalida';
-import type { RespuestaListBuzonSalidaMeta } from './respuestaListBuzonSalidaMeta';
+import type { MetaDePagina } from './metaDePagina';
 
 export interface RespuestaListBuzonSalida {
   data: BuzonSalida[];
-  meta?: RespuestaListBuzonSalidaMeta;
+  meta?: MetaDePagina | null;
   status?: string;
 }
