@@ -6,7 +6,7 @@
  * se traduce sin inventar ni filtrar nada.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ErrorDeApi, peticionAlBff } from "../cliente-bff";
+import { ErrorDeApi, peticionAlBff, rutaDelBff } from "../cliente-bff";
 
 function respuestaDe(
   cuerpo: unknown,
@@ -109,5 +109,52 @@ describe("peticionAlBff", () => {
     );
     const error = (await peticionAlBff("/audit").catch((e: unknown) => e)) as ErrorDeApi;
     expect(error.esReintentable).toBe(false);
+  });
+});
+
+describe("rutaDelBff", () => {
+  // El cliente generado por orval reproduce las rutas del contrato, con
+  // su prefijo de version. El BFF lo añade por su cuenta al reenviar, asi
+  // que espera recibirlas sin el. Antes de normalizarlo aqui, cada
+  // llamada generada llegaba como `/api/bff/api/v1/...`, cuyo primer
+  // segmento es `api`: la allowlist del proxy la rechazaba con un 403 y
+  // la interfaz entera se quedaba sin datos.
+  it("quita el prefijo del contrato que el BFF vuelve a añadir", () => {
+    expect(rutaDelBff("/api/v1/records")).toBe("/api/bff/records");
+    expect(rutaDelBff("/api/v1/scans/abc/cancel")).toBe("/api/bff/scans/abc/cancel");
+  });
+
+  it("conserva la cadena de consulta", () => {
+    expect(rutaDelBff("/api/v1/records?limite=25&ruc=20123456789")).toBe(
+      "/api/bff/records?limite=25&ruc=20123456789",
+    );
+  });
+
+  it("acepta rutas que ya vienen sin el prefijo", () => {
+    expect(rutaDelBff("/scans")).toBe("/api/bff/scans");
+  });
+
+  it("no toca un segmento que solo empiece igual", () => {
+    // `/api/v1beta` no es el prefijo: recortarlo dejaria una ruta
+    // distinta de la que pidio el llamante.
+    expect(rutaDelBff("/api/v1beta/records")).toBe("/api/bff/api/v1beta/records");
+  });
+
+  it("deja la ruta en el primer segmento permitido por el proxy", () => {
+    // Lo que de verdad importa: el segmento que la allowlist del BFF
+    // compara. Si no es uno de los suyos, la peticion muere en un 403.
+    const permitidos = ["me", "mailboxes", "scans", "records", "review", "reports", "audit"];
+    for (const ruta of [
+      "/api/v1/me",
+      "/api/v1/mailboxes",
+      "/api/v1/scans",
+      "/api/v1/records",
+      "/api/v1/review/count",
+      "/api/v1/reports/exports",
+      "/api/v1/audit",
+    ]) {
+      const primero = rutaDelBff(ruta).replace("/api/bff/", "").split(/[/?]/)[0];
+      expect(permitidos).toContain(primero);
+    }
   });
 });

@@ -45,11 +45,39 @@ interface ProblemDetails {
 /** Prefijo de las rutas del BFF. Nunca se llama al backend directamente. */
 const BASE = "/api/bff";
 
+/**
+ * Prefijo que el contrato OpenAPI lleva en cada ruta y que el BFF añade
+ * por su cuenta al reenviar.
+ */
+const PREFIJO_DEL_CONTRATO = "/api/v1";
+
+/**
+ * Traduce una ruta del contrato a una ruta del BFF.
+ *
+ * El cliente generado reproduce las rutas tal como las publica el
+ * backend, con su prefijo de versión; el proxy del BFF, en cambio, lo
+ * añade él mismo y espera recibir la ruta sin él. Sin esta
+ * normalización la petición llegaría como `/api/bff/api/v1/records`, su
+ * primer segmento sería `api` y la allowlist de prefijos la rechazaría
+ * con un 403: no una ruta rota, sino todas.
+ *
+ * Se normaliza aquí y no en el BFF a propósito. El mutator es el único
+ * sitio que conoce el direccionamiento del BFF, y dejar que el proxy
+ * acepte dos formas de la misma ruta debilitaría su allowlist, que es
+ * precisamente lo que impide que sea un proxy abierto.
+ */
+export function rutaDelBff(ruta: string): string {
+  const sinPrefijo = ruta.startsWith(`${PREFIJO_DEL_CONTRATO}/`)
+    ? ruta.slice(PREFIJO_DEL_CONTRATO.length)
+    : ruta;
+  return `${BASE}${sinPrefijo}`;
+}
+
 export async function peticionAlBff<T>(
   ruta: string,
   opciones: RequestInit = {},
 ): Promise<T> {
-  const respuesta = await fetch(`${BASE}${ruta}`, {
+  const respuesta = await fetch(rutaDelBff(ruta), {
     ...opciones,
     // `same-origin` basta: la cookie es de este mismo origen. Usar
     // `include` abriría el envío de credenciales a terceros orígenes.

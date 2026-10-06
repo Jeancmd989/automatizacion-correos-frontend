@@ -95,6 +95,51 @@ jobs:
           git diff --exit-code src/generated \
             || { echo "::error::El cliente generado esta desactualizado. Ejecuta 'npm run api:generate' y commitea el resultado."; exit 1; }
 
+  # ───────────────────────────────────────────────────────────────────
+  # E2E en un navegador real.
+  #
+  # Cubre lo que `vitest` no alcanza: la comprobacion de sesion, que vive
+  # en un Server Component y en un `redirect`; el progreso en vivo, que
+  # necesita un `EventSource` de verdad; y la navegacion entre paginas del
+  # listado por cursor.
+  #
+  # Va despues de `verificacion` porque Playwright descarga un navegador:
+  # no tiene sentido pagar ese minuto si el tipado ya esta roto.
+  # ───────────────────────────────────────────────────────────────────
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    needs: [verificacion]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      # Solo Chromium: los tres navegadores triplicarian el tiempo para
+      # verificar flujos que no dependen del motor. Las diferencias entre
+      # navegadores son un problema de estilos, no de estos tests.
+      - name: Instalar el navegador
+        run: npx playwright install --with-deps chromium
+
+      # El propio `playwright.config.ts` arranca el servidor con el build
+      # de produccion y le pasa el entorno que necesita, incluido el
+      # secreto de sesion con el que la suite sella su cookie.
+      - name: Ejecutar la suite
+        run: npx playwright test
+
+      - name: Publicar el informe si algo fallo
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: informe-playwright
+          path: playwright-report/
+          retention-days: 7
+
   build:
     name: Construccion
     runs-on: ubuntu-latest

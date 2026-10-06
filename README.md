@@ -11,11 +11,8 @@ registros y descargar reportes.
 
 ## Estado
 
-Implementada la **Fase 0** del [plan de arquitectura](https://github.com/Jeancmd989/automatizacion-correos-backend/blob/main/ARQUITECTURA.md#17-plan-de-implementación-por-fases):
-cimientos del proyecto. Build, linting, tipado estricto, tests y CI funcionando sobre una
-estructura lista para construir encima.
-
-**La interfaz de operación es la Fase 6** y todavía no está escrita. Lo que hay hoy:
+Implementadas las **fases 0 y 6**, y los tests E2E de la **fase 7**, del
+[plan de arquitectura](https://github.com/Jeancmd989/automatizacion-correos-backend/blob/main/ARQUITECTURA.md#17-plan-de-implementación-por-fases).
 
 | Pieza | Estado |
 |-------|--------|
@@ -24,12 +21,24 @@ estructura lista para construir encima.
 | Cliente de API generado desde el contrato del backend (42 ficheros) | ✅ |
 | Cabeceras de seguridad, tokens de diseño, accesibilidad base | ✅ |
 | CI: linting, tipado, tests, build, auditoría y sincronía de contrato | ✅ |
-| Rutas del BFF (login OIDC, sesión, proxy) | pendiente — Fase 6 |
-| Features: buzones, escaneos, registros, revisión, reportes | pendiente — Fase 6 |
+| Rutas del BFF (login OIDC, sesión, proxy) | ✅ |
+| Features: buzones, escaneos, registros, revisión, reportes | ✅ |
+| E2E en navegador real con Playwright | ✅ |
 
-**Verificación actual:** 7 tests en verde, `eslint` y `tsc --noEmit` limpios (cliente
-generado incluido), build de producción correcto, cero vulnerabilidades en dependencias
-de producción.
+**Verificación actual:** 21 tests de unidad y 43 E2E en verde, `eslint` y `tsc --noEmit`
+limpios (cliente generado incluido), build de producción correcto, cero vulnerabilidades
+en dependencias de producción.
+
+Los E2E encontraron dos defectos que ningún test de componente podía ver:
+
+- **Todas las peticiones de datos recibían un 403.** El cliente generado reproduce las
+  rutas del contrato, con su prefijo `/api/v1`, y el mutator les añadía `/api/bff`
+  delante: la petición llegaba como `/api/bff/api/v1/records`, cuyo primer segmento es
+  `api`, y la allowlist del proxy la rechazaba. No una ruta rota: todas. El test que
+  existía usaba rutas ya cortas, así que pasaba.
+- **El contador de la cola de revisión nunca aparecía.** `Navegacion` lo recibía por una
+  prop que ningún llamante pasaba, porque el layout que la monta es un Server Component y
+  no puede ejecutar la consulta. Ahora lo pide ella misma.
 
 ---
 
@@ -68,6 +77,26 @@ Equivale a `lint` + `typecheck` + `test`. Para el build de producción:
 npm run build
 ```
 
+Los E2E van aparte porque arrancan un navegador y un servidor:
+
+```bash
+npx playwright install chromium
+```
+
+```bash
+npm run e2e
+```
+
+No necesitan backend ni proveedor de identidad: las respuestas de datos se interceptan en
+`/api/bff/**` —que es una petición del navegador a este mismo servidor— y la sesión se
+construye sellando una cookie `iron-session` con el mismo secreto que usa la aplicación.
+Montar un Auth0 real para probar la interfaz haría la suite lenta, frágil y dependiente de
+credenciales que no deben estar en el repositorio.
+
+Corren contra el build de producción y no contra el servidor de desarrollo: en modo
+desarrollo Next recompila bajo demanda y los tests se vuelven inestables por esperas que
+no tienen nada que ver con la aplicación.
+
 ---
 
 ## Cliente de API
@@ -84,9 +113,8 @@ npm run api:generate
 Lee el contrato versionado y regenera `src/generated/`. **El CI falla si el resultado
 difiere de lo commiteado**, de modo que nadie puede editar el cliente a mano.
 
-Se lee de disco y no de una URL porque el repositorio del backend es privado: una
-descarga anónima devuelve 404, y meter un token de otro repositorio en el camino crítico
-de cada pull request es fragilidad a cambio de nada.
+Se lee de disco y no de una URL para que el CI no dependa de la disponibilidad de otro
+repositorio en el camino crítico de cada pull request.
 
 **Refresco del contrato.** Lo hace
 [`sincronizar-contrato.yml`](.github/workflows/sincronizar-contrato.yml): trae el
@@ -130,6 +158,8 @@ src/
 │   ├── lib/       cliente del BFF, utilidades
 │   └── ui/        design system
 └── generated/     ⚠ GENERADO desde OpenAPI — no editar a mano
+
+e2e/               Tests de navegador (Playwright)
 ```
 
 Cada feature agrupa su UI, su lógica y sus llamadas. Es lo que evita el hook de 350
