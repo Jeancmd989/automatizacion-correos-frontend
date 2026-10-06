@@ -2,19 +2,25 @@
 # Refresco del contrato de API.
 #
 # Trae el `openapi.json` del repositorio del backend, regenera el
-# cliente y abre un pull request si algo cambio.
+# cliente, comprueba que la interfaz sigue compilando contra él y abre
+# un pull request si algo cambió.
 #
-# Por que un pull request y no un commit directo: un cambio de contrato
+# Por qué un pull request y no un commit directo: un cambio de contrato
 # puede romper la interfaz, y conviene que alguien lo mire antes de que
-# entre en `main`. Ademas, el propio CI del pull request ejecuta el
-# tipado y los tests contra el cliente nuevo, de modo que una
-# incompatibilidad se ve en la revision y no al desplegar.
+# entre en `main`.
 #
-# Requisito: el secreto `TOKEN_CONTRATO_BACKEND`, un token de acceso
-# personal de grano fino con permiso de SOLO LECTURA sobre el contenido
-# del repositorio automatizacion-correos-backend. Hace falta porque ese
-# repositorio es privado y el GITHUB_TOKEN de este solo alcanza a este.
-# Mientras el secreto no exista, el workflow avisa y termina sin error.
+# Por qué la verificación corre AQUÍ y no en el CI del pull request: un
+# pull request abierto con el `GITHUB_TOKEN` del propio repositorio no
+# dispara los workflows de `pull_request`. Es una salvaguarda de GitHub
+# contra bucles de automatización, y significa que ese pull request
+# llegaría a la revisión sin ningún check. Así que el tipado y los tests
+# se ejecutan en este trabajo, antes de abrirlo, y el resultado va en el
+# cuerpo del pull request.
+#
+# No hace falta ningún secreto: el repositorio del backend es público,
+# de modo que el contrato se descarga de forma anónima. Un token de
+# acceso personal para esto sería un secreto más que custodiar y rotar
+# a cambio de nada.
 # ─────────────────────────────────────────────────────────────────────
 
 name: Sincronizar contrato de API
@@ -22,13 +28,16 @@ name: Sincronizar contrato de API
 on:
   # Manual, para traer un cambio concreto cuando se necesita.
   workflow_dispatch:
-  # Y una revision semanal, para que una deriva no pase meses inadvertida.
+  # Y una revisión semanal, para que una deriva no pase meses inadvertida.
   schedule:
     - cron: "0 6 * * 1"
 
 permissions:
   contents: write
   pull-requests: write
+
+env:
+  URL_DEL_CONTRATO: https://raw.githubusercontent.com/Jeancmd989/automatizacion-correos-backend/main/openapi.json
 
 jobs:
   sincronizar:
@@ -37,53 +46,76 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Comprobar que el token esta configurado
-        id: comprobacion
-        env:
-          TOKEN: ${{ secrets.TOKEN_CONTRATO_BACKEND }}
-        run: |
-          if [ -z "$TOKEN" ]; then
-            echo "::warning::Falta el secreto TOKEN_CONTRATO_BACKEND. Ver la cabecera de este workflow."
-            echo "disponible=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "disponible=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - uses: actions/setup-node@v4
-        if: steps.comprobacion.outputs.disponible == 'true'
         with:
           node-version: "22"
           cache: npm
 
+      # `--fail` es lo que convierte un 404 en un error. Sin él, curl
+      # escribiría la página de error de GitHub en `contrato/openapi.json`
+      # y orval fallaría después con un mensaje que no menciona la
+      # descarga, que es el peor sitio donde enterarse.
       - name: Descargar el contrato del backend
-        if: steps.comprobacion.outputs.disponible == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.TOKEN_CONTRATO_BACKEND }}
         run: |
-          gh api \
-            -H "Accept: application/vnd.github.raw" \
-            /repos/Jeancmd989/automatizacion-correos-backend/contents/openapi.json \
-            > contrato/openapi.json
+          curl --fail --silent --show-error --location \
+            "$URL_DEL_CONTRATO" -o contrato/openapi.json
+          python -c "import json,sys; json.load(open('contrato/openapi.json'))" \
+            || { echo "::error::Lo descargado no es JSON válido"; exit 1; }
 
       - name: Regenerar el cliente
-        if: steps.comprobacion.outputs.disponible == 'true'
         run: |
           npm ci
           npm run api:generate
 
-      - name: Abrir pull request si hay cambios
-        if: steps.comprobacion.outputs.disponible == 'true'
+      - name: Comprobar si hay cambios
+        id: cambios
+        run: |
+          if git diff --quiet -- contrato/openapi.json src/generated; then
+            echo "hay=false" >> "$GITHUB_OUTPUT"
+            echo "El contrato no ha cambiado."
+          else
+            echo "hay=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # La comprobación que da sentido a todo esto: si el backend retiró
+      # un campo que la interfaz usa, aquí falla el tipado. Se deja
+      # continuar para poder abrir el pull request de todos modos: un
+      # cambio incompatible es justo el que hay que ver en una revisión,
+      # no el que hay que esconder.
+      - name: Verificar la interfaz contra el cliente nuevo
+        id: verificacion
+        if: steps.cambios.outputs.hay == 'true'
+        continue-on-error: true
+        run: |
+          npm run typecheck
+          npm run test
+
+      - name: Abrir pull request
+        if: steps.cambios.outputs.hay == 'true'
         uses: peter-evans/create-pull-request@v7.0.8
         with:
           branch: contrato/actualizacion-automatica
           commit-message: "chore(contrato): actualizar el contrato de API y regenerar el cliente"
           title: "Actualizar el contrato de API"
           body: |
-            El contrato del backend cambio. Este pull request trae el
+            El contrato del backend cambió. Este pull request trae el
             `openapi.json` actualizado y regenera el cliente.
 
-            Revisar el diff de `src/generated/`: si desaparece un campo
-            que la interfaz usa, el `typecheck` de este mismo pull
-            request lo señalara.
+            **Verificación del tipado y los tests contra el cliente nuevo:
+            `${{ steps.verificacion.outcome }}`.**
+
+            Si dice `failure`, el backend retiró o cambió algo que la
+            interfaz usa: el log del workflow dice qué. No fusionar sin
+            adaptar el código.
+
+            La verificación corre en el workflow que abre este pull
+            request porque GitHub no dispara los checks de `pull_request`
+            en los que abre el `GITHUB_TOKEN`.
           labels: contrato
           delete-branch: true
+
+      - name: Fallar si la verificación no pasó
+        if: steps.cambios.outputs.hay == 'true' && steps.verificacion.outcome == 'failure'
+        run: |
+          echo "::error::El contrato nuevo rompe la interfaz. El pull request queda abierto para revisarlo."
+          exit 1

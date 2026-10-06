@@ -118,15 +118,16 @@ repositorio en el camino crítico de cada pull request.
 
 **Refresco del contrato.** Lo hace
 [`sincronizar-contrato.yml`](.github/workflows/sincronizar-contrato.yml): trae el
-`openapi.json` del backend, regenera el cliente y **abre un pull request** si algo
-cambió. Un cambio de contrato puede romper la interfaz, así que conviene revisarlo; y el
-CI de ese pull request ejecuta el tipado contra el cliente nuevo, de modo que un campo
-que desaparece se ve en la revisión y no al desplegar.
+`openapi.json` del backend, regenera el cliente, comprueba que la interfaz sigue
+compilando contra él y **abre un pull request** si algo cambió. Un campo que desaparece
+se ve así en la revisión y no al desplegar.
 
-> Para que ese workflow funcione hay que crear el secreto
-> `TOKEN_CONTRATO_BACKEND`: un token de acceso personal de grano fino con permiso de
-> **solo lectura** sobre el contenido de `automatizacion-correos-backend`. Mientras no
-> exista, el workflow avisa y termina sin fallar. Corre manualmente y cada lunes.
+> No necesita ningún secreto: el repositorio del backend es público y el contrato se
+> descarga de forma anónima. Corre manualmente y cada lunes.
+>
+> La verificación del tipado se ejecuta **dentro de ese workflow**, antes de abrir el
+> pull request, porque GitHub no dispara los checks de `pull_request` en los que abre el
+> `GITHUB_TOKEN`: sin eso, el pull request llegaría a la revisión sin ningún check.
 
 Para trabajar contra un backend local con cambios sin publicar:
 

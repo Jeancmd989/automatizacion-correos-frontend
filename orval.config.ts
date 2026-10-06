@@ -5,9 +5,10 @@ import { defineConfig } from "orval";
  *
  * El contrato se versiona en `contrato/openapi.json` y es la copia
  * autoritativa para este repositorio. Se lee de disco y no de una URL
- * porque el repositorio del backend es privado: una descarga anonima
- * devuelve 404, y meter un token de otro repositorio en el camino
- * critico de cada pull request es fragilidad a cambio de nada.
+ * para que generar el cliente no dependa de la disponibilidad de otro
+ * repositorio en el camino critico de cada pull request, y para que el
+ * cliente commiteado se pueda reproducir exactamente a partir de lo que
+ * hay en el arbol.
  *
  * El refresco lo hace `.github/workflows/sincronizar-contrato.yml`,
  * que abre un pull request cuando el backend cambia. Asi la
